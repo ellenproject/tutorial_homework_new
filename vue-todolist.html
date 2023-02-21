@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todolist-Vue</title>
+</head>
+<body>
+    <div class="app">
+        <input type="text" placeholder="請輸入代辦事項" v-model="newTodo" v-on:keyup.enter="addTodo(newTodo)">
+        <h2>事項列表</h2>
+        <!-- {{newTodo}} -->
+        <ul>
+            <li v-for="todo in todos">
+                {{todo.content}}
+                <a href="#" v-on:click.prevent="removeTodo(todo)">刪除</a>
+            </li>
+        </ul>
+    </div>
+    <!-- 
+        1. 把空格的值顯示出來：綁定v-model，newTodo是空格裡的值，是字串
+        2. enter就新增方法addTodo
+        3. 新增方法裡的參數要放空格裡的值newTodo
+
+        4. v-for跑迴圈todo in todos，todos是陣列：
+            todos:[
+                todo,
+                todo,
+                todo
+            ]
+            注意，不是
+            todos:[
+                newTodo, 
+                newTodo, 
+                newTodo
+            ]
+            因為newTodo是空格的值，而todo是原本的li，也就是
+            空格：值﹙newTodo﹚
+            顯示資料：
+                ul
+                    li﹙todo﹚，把newTodo空格值代入todo
+                    li﹙todo﹚，把newTodo空格值代入todo
+                    li﹙todo﹚，把newTodo空格值代入todo
+        5. 把addTodo事件寫在方法methods裡
+        6. HTML裡的addTodo方法代入的參數是newTodo，methods裡的addTodo方法代入的參數卻是todo？？
+            應該是：HTML裡的addTodo方法要取出空格的值，取出的值放入li，
+            -> methods裡的addTodo指：增加這個li項目﹙此時這個li已經有值﹙newTodo﹚﹚
+
+    -->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
+    <script>
+        const app = new Vue({
+            el: '.app',
+            data:{
+                todos:[],
+                newTodo:'',
+            },
+            methods:{
+                addTodo: function(todo){
+                    this.todos.push({content: todo, completed: false})
+                },
+                removeTodo: function(todo){
+                    this.todos.splice(this.todos.indexOf(todo), 1);
+                }
+            }
+        })
+    </script>
+</body>
+</html>

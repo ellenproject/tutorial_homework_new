@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增刪除篩選</title>
+</head>
+<body>
+    <h2>新增資料</h2>
+    <input type="text" placeholder="充電站名稱" class="stationName">
+    <select class="stationCharge">
+        <option value="免費">免費</option>
+        <option value="付費">付費</option>
+    </select>
+    <input type="button" class="btn" value="儲存">
+
+    <h2>資料顯示</h2>
+    <div class="filter">
+        <input type="button" value="全部">
+        <input type="button" value="免費">
+        <input type="button" value="付費">
+    </div>
+
+    <ul class="list">
+        <!-- <li>小花充電站，免費 <input type="button" class="delete" value="刪除"></li> -->
+    </ul>
+
+
+
+    <script>
+        let data = [
+            {
+                Charge: "免費",
+                name: "小花充電站",
+            },
+            {
+                Charge: "付費",
+                name: "小明充電站",
+            },
+            {
+                Charge: "付費",
+                name: "小天充電站",
+            },
+            {
+                Charge: "付費",
+                name: "小王充電站",
+            },
+        ];
+        const list = document.querySelector('.list');
+
+        //預設載入data
+        function init(){
+            let str = '';
+            data.forEach(function(item, index){
+                str += `<li>${item.name}，${item.Charge} <input type="button" data-num=${index} class="delete" value="刪除"></li>`;
+            })
+            // console.log(str);
+
+            list.innerHTML = str;
+        }
+        init();
+
+        const stationName = document.querySelector('.stationName');
+        const stationCharge = document.querySelector('.stationCharge');
+        const btn = document.querySelector('.btn');
+        const stationFilter = document.querySelector('.filter');
+        
+        //新增項目 //取得空格的值，存放到物件裡，再把這個物件放到data裡
+        btn.addEventListener('click', function(e){
+            let obj = {};
+            obj.Charge = stationCharge.value;
+            obj.name = stationName.value;
+            
+            data.push(obj);
+            init();
+
+            stationName.value = "";
+            stationCharge.value = "";
+        })
+
+        //刪除項目 //透過data-num="_"，取出_這個值，接著就可以用splice去刪除資料
+        list.addEventListener('click', function(e){
+            if(e.target.getAttribute("class") !== "delete"){
+                alert("你目前不是點擊到按鈕");
+                return;
+            }
+            let num = e.target.getAttribute("data-num");
+            // console.log(num);
+            data.splice(num, 1);
+            init();
+        })
+
+        
+        //篩選器
+        stationFilter.addEventListener('click', function(e){
+            if(e.target.value == undefined){
+                console.log('你點擊到空的地方');
+                return;
+            }
+
+            let str = "";
+
+            data.forEach(function(item, index){
+                // console.log(e.target.value == item.Charge);
+                //點擊的值 == 資料的值
+                if(e.target.value == "全部"){
+                    str += `<li>${item.name}，${item.Charge} <input type="button" data-num=${index} class="delete" value="刪除"></li>`;
+                }else if(e.target.value == item.Charge){
+                    str += `<li>${item.name}，${item.Charge} <input type="button" data-num=${index} class="delete" value="刪除"></li>`;
+                }
+            })
+
+            list.innerHTML = str;
+        })
+    </script>
+</body>
+</html>

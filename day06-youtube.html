@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>youtube API</title>
+</head>
+<body>
+    <div id="container"><div class="wrap"></div></div>
+
+
+    <script>
+
+        var wrap = document.querySelector('.wrap');
+        
+        function makeRequest(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails,status&playlistId=PLBwG4wh6sKb8s1y9YzWP0bFp2uLFd84wc&maxResults=10&key=AIzaSyB7E3INlcl1i14OGRSkJqALuIiPI9JBMm8');
+            xhr.onload = function(){
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+
+                for(let i=0; i<response.items.length; i++){
+                    var item = response.items[i].snippet;
+
+                    var ytTitle = item.title;
+                    var ytImg = item.thumbnails.default.url;
+                    var ytListId = response.items[i].id;
+                    var ytUrl = 'https://www.youtube.com/watch?v=PMUemge7hck&list='+ytListId+'&ab_channel=FrancescoParrino';
+                    
+                    var box = document.createElement('div');
+                    box.className = 'box';
+                    var link = document.createElement('a');
+                    link.className = 'link';
+                    var img = document.createElement('img');
+                    img.className = 'img';
+                    var title = document.createElement('h2');
+                    title.className = 'title';
+
+                    link.setAttribute('href', ytUrl);
+                    link.setAttribute('target', '_blank');
+                    img.setAttribute('src', ytImg);
+                    title.innerHTML = ytTitle;
+
+                    wrap.appendChild(box);
+                    box.appendChild(link);
+                    link.appendChild(img);
+                    box.appendChild(title);
+                    
+                }
+            }
+
+            xhr.send();
+        }
+
+        makeRequest();
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>HERE-api</title>
+    <!-- HERE Maps api -->
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <style>
+        #mapContainer{
+            width: 640px;
+            height: 480px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mapContainer"></div>
+
+
+
+    <script>
+        function moveMapToBerlin(map){
+            map.setCenter({lat:25.058782528958847, lng:121.61181812698887});
+            map.setZoom(14);
+        }
+
+        var platform = new H.service.Platform({
+            apikey: 'DawVb6clqxGc2xIonpvPUBya1hFYGRMDDxEroPwjlOM'
+        });
+        
+        var defaultLayers = platform.createDefaultLayers({
+            lg: 'tw',
+        });
+
+        var map = new H.Map(document.getElementById('mapContainer'),
+        defaultLayers.vector.normal.map,{
+            center: {lat:25.058782528958847, lng:121.61181812698887},
+            zoom: 4,
+            pixelRatio: window.devicePixelRatio || 1
+        });
+
+        window.addEventListener('resize', () => map.getViewPort().resize());
+
+        var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+        var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+        window.onload = function () {
+            moveMapToBerlin(map);
+        }
+
+
+
+
+    </script>
+</body>
+</html>

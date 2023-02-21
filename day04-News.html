@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News api</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #container{
+            background-color: #fff;
+        }
+        .wrap{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .wrap .news{
+            width: 22%;
+            background-color: #fafafa;
+            margin: 10px;
+            border-radius: 20px;
+            padding: 15px;
+            transition: all .5s ease-in-out;
+        }
+        .news:hover{
+            box-shadow: 1px 50px 50px #ccc;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        .news:hover .link{
+            color: darkred;
+        }
+        .wrap .link{
+            text-decoration: none;
+            font-size: 20px;
+            color: #212529;
+        }
+        .news img{
+            margin: 0 auto;
+            display: flex;
+        }
+        .news .link, .title, .desc, .metadata{
+            padding: 10px 0;
+            transition: all .1s ease-in-out;
+        }
+        .news .desc a{
+            text-decoration: none;
+            color: #000;
+        }
+        .news .metadata{
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"><div class="wrap"></div></div>
+
+    <script>
+        
+
+        function makeRequest(){
+            var wrap = document.querySelector('.wrap')
+
+            var currentDate = new Date();
+            var year = currentDate.getFullYear();
+            var month = currentDate.getMonth()+1;
+            var date = currentDate.getDate();
+
+            var toNow = year + '-' + month + '-' + date;
+            var daysAgo = 1;
+            var fromDaysAgo = year + '-' + month + '-' + (date - daysAgo);
+
+            var url = 'https://newsapi.org/v2/everything?q=business&from='+ fromDaysAgo +'&to=' + toNow + '&sortBy=popularity&apiKey=e37a92df85fc4822a219d351270877fa';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, 'true');
+            xhr.onload = function(){
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+
+                for(let i = 0; i < 20; i++){
+                    var news = response.articles[i];
+
+                    var box = document.createElement('div');
+                    box.className = 'news';
+                    var link = document.createElement('a');
+                    link.className = 'link';
+                    var title = document.createElement('h2');
+                    title.className = 'title';
+                    var desc = document.createElement('p');
+                    desc.className = 'desc';
+                    var metadata = document.createElement('p');
+                    metadata.className = 'metadata';
+                    var img = document.createElement('img');
+                    
+                    wrap.appendChild(box);
+
+                    box.appendChild(img);
+                    box.appendChild(link);
+                    link.appendChild(title);
+                    box.appendChild(desc);
+                    box.appendChild(metadata);
+
+                    img.setAttribute('src', news.urlToImage);
+                    img.height = 200;
+                    link.setAttribute('href', news.url);
+
+                    title.innerHTML = news.title;
+                    desc.innerHTML = news.description;
+                    metadata.innerHTML = 'source: ' + news.source.name + ' | ' + 'published at: ' + news.publishedAt;
+                }
+            }
+            xhr.send();
+        }
+
+        makeRequest();
+    </script>
+</body>
+</html>
