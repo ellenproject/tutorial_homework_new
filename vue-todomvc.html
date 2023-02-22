@@ -78,7 +78,37 @@
                 editedTodo: null,
                 visibility: "all",
             }, 
-
+            watch: {
+                todos: {
+                    handler: function(todos){
+                        todoStorage.save(todos);
+                    },
+                    deep: true
+                }
+            },
+            computed: {
+                filteredTodos: function(){
+                    return filters[this.visibility](this.todos);
+                },
+                remaining: function(){
+                    return filters.active(this.todos).length;
+                },
+                allDone: {
+                    get: function(){
+                        return this.remaining === 0;
+                    }, 
+                    set: function(value){
+                        this.todos.forEach(function(todo){
+                            todo.completed = value;
+                        });
+                    }
+                }
+            },
+            filters:{
+                pluralize: function(n){
+                    return n === 1 ? "item" : "items";
+                }
+            }
         })
     </script>
 </body>
