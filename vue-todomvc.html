@@ -67,7 +67,8 @@
                                 <input type="checkbox" class="form-check-input" id="a1">
                                 <label class="form-check-label" for="a1">{{item.title}}</label>
                             </div>
-                            <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(key)"><span aria-hidden="true">&times;</span></button>
+                            <!-- <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(key)"><span aria-hidden="true">&times;</span></button> -->
+                            <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(item)"><span aria-hidden="true">&times;</span></button>
                         </div>
                     </li>
                     <li class="list-group-item">
@@ -112,8 +113,16 @@
                     });
                     this.newTodo = '';
                 },
-                removeTodo: function(key){
-                    this.todos.splice(key, 1);
+                removeTodo: function(todo){
+                    var newIndex = '';
+                    var vm = this;
+                    vm.todos.forEach(function(item, key){
+                        if (todo.id === item.id){
+                            newIndex = key;
+                        }
+                    })
+                    // this.todos.splice(key, 1);
+                    this.todos.splice(newIndex, 1);
                 }
             },
         })
