@@ -38,35 +38,33 @@
     <div class="container">
         <section class="todoapp">
             <header class="header">
-                <input 
-                    type="text" 
-                    autofocus="autofocus" 
-                    autocomplete="off" 
-                    placeholder="What needs to be done?" 
-                    class="new-todo"
-                >
+                <input type="text" autofocus="autofocus" autocomplete="off" placeholder="What needs to be done?"  class="new-todo" v-model="newTodo" @keyup.enter="addTodo">
             </header>
-            <section class="main">
-                <input type="checkbox" id="toggle-all" class="toggle-all">
+            <section class="main" v-show="todos.length" v-cloak>
+                <input type="checkbox" id="toggle-all" class="toggle-all" v-model="allDone">
                 <label for="toggle-all"></label>
                 <ul class="todo-list">
-                    <li class="todo">
-                        <div class="view"></div>
-                        <input type="checkbox" class="toggle">
-                        <label>ableidh</label>
-                        <button class="destory"></button>
+                    <li class="todo" v-for="todo in filteredTodos" :key="todo.id" :class="{completed: todo.completed, editing: todo == editedTodo}">
+                        <div class="view">
+                            <input type="checkbox" class="toggle" v-model="todo.completed">
+                            <label @dblclick="editTodo(todo)">{{todo.title}}</label>
+                            <button class="destory" @click="removeTodo(todo)"></button>
+                        </div>
+                        <input type="text" class="edit" v-model="todo.title" v-to-focus="todo ++ editedTodo" @blur="blur" @keyup.enter="doneEdit(todo)" @keyup.esc="cancelEdit(todo)">
                     </li>
-                    <input type="text" class="edit">
                 </ul>
             </section>
-            <footer class="footer">
-                <span class="todo-count"></span>
+            <footer class="footer" v-show="todo.length">
+                <span class="todo-count">
+                    <strong>{{remaining}}</strong>
+                    {{remaining | plurzlize}} left
+                </span>
                 <ul class="filters">
-                    <li><a href="" class="selected">All</a></li>
-                    <li><a href="" class="">Active</a></li>
-                    <li><a href="" class="">Completed</a></li>
+                    <li><a href="" :class="selected: visibility == 'all' ">All</a></li>
+                    <li><a href="" :class="selected: visibility == 'active' ">Active</a></li>
+                    <li><a href="" :class="selected: visibility == 'completed' ">Completed</a></li>
                 </ul>
-                <button class="clear-completed">Clear completed</button>
+                <button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">Clear completed</button>
             </footer>
         </section>
     </div>
