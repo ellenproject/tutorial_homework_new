@@ -64,10 +64,11 @@
                     <li class="list-group-item" v-for="(item, key) in todos">
                         <div class="d-flex">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="a1">
-                                <label class="form-check-label" for="a1">{{item.title}}</label>
+                                <input type="checkbox" class="form-check-input" v-model="item.completed" :id="item.id">
+                                <label class="form-check-label" :for="item.id" :class="{'completed': item.completed}">{{item.title}}</label>
                             </div>
-                            <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(key)"><span aria-hidden="true">&times;</span></button>
+                            <!-- <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(key)"><span aria-hidden="true">&times;</span></button> -->
+                            <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(item)"><span aria-hidden="true">&times;</span></button>
                         </div>
                     </li>
                     <li class="list-group-item">
@@ -82,6 +83,17 @@
         </section>
     </div>
 
+    <!-- v-bind:id指令，用來控制「一般」屬性 -->
+    <!--比如在data裡設subtotal的值是10，把{{subtotal}}寫在「HTML網頁模版」，<h1>{{subtotal}}</h1> -->
+    <!-- <h1>10<h1/> -->
+    <!-- 但即使在data裡設customId為a1，把{{customId}}寫在「標籤」，比如<p id="{{customId}}"><p/>，也顯示不出來 -->
+    <!-- 因此要在「標籤」裡顯示data內容，則要用v-bind -->
+    <!-- <p v-bind:id="customId"><p/> -->
+    <!-- <p v-bind:id="a1"><p/> -->
+    <!-- v-bind:class指令，用來控制「標籤」的class與style -->
+    <!-- 比如：當message的內容長度超過10個字，就自動加上error的class -->
+    <!-- <div v-bind:class="{'error': message.length > 10}"><div/> -->
+
 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
@@ -94,7 +106,7 @@
                     {
                         id: '123',
                         title: '待辦事項',
-                        completed: true
+                        completed: true,
                     }
                 ],
             },
@@ -112,8 +124,16 @@
                     });
                     this.newTodo = '';
                 },
-                removeTodo: function(key){
-                    this.todos.splice(key, 1);
+                removeTodo: function(todo){
+                    var newIndex = '';
+                    var vm = this;
+                    vm.todos.forEach(function(item, key){
+                        if (todo.id === item.id){
+                            newIndex = key;
+                        }
+                    })
+                    // this.todos.splice(key, 1);
+                    this.todos.splice(newIndex, 1);
                 }
             },
         })
