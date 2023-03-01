@@ -55,14 +55,14 @@
             <div class="card text-center">
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs">
-                        <li class="nav-item"><a href="#" class="nav-link active">全部</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">進行中</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">已完成</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link" :class="{'active': visibility == 'all'}" @click="visibility='all'">全部</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link" :class="{'active': visibility == 'active'}" @click="visibility='active'">進行中</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link" :class="{'active': visibility == 'completed'}" @click="visibility='completed'">已完成</a></li>
                     </ul>
                 </div>
                 <ul class="list-group list-group-flush text-left">
-                    <li class="list-group-item" v-for="(item, key) in todos">
-                        <div class="d-flex">
+                    <li class="list-group-item" v-for="(item, key) in filteredTodos" @dblclick="editTodo(item)">
+                        <div class="d-flex" v-if="item.id !== cacheTodo.id">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" v-model="item.completed" :id="item.id">
                                 <label class="form-check-label" :for="item.id" :class="{'completed': item.completed}">{{item.title}}</label>
@@ -70,14 +70,15 @@
                             <!-- <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(key)"><span aria-hidden="true">&times;</span></button> -->
                             <button type="button" class="close ml-auto" aria-label="Close" @click="removeTodo(item)"><span aria-hidden="true">&times;</span></button>
                         </div>
+                        <input type="text" class="form-control" v-if="item.id == cacheTodo.id" v-model="cacheTitle" @keyup.esc="cancelEdit" @keyup.enter="doneEdit(item)">
                     </li>
-                    <li class="list-group-item">
+                    <!-- <li class="list-group-item">
                         <input type="text" class="form-control">
-                    </li>
+                    </li> -->
                 </ul>
                 <div class="card-footer d-flex justify-content-between">
-                    <span>還有3筆任務未完成</span>
-                    <a href="#">清除所有任務</a>
+                    <span>還有 {{undoneTodos.length}} 筆任務未完成</span>
+                    <a href="#" @click="removeAll">清除所有任務</a>
                 </div>
             </div>
         </section>
@@ -94,7 +95,7 @@
     <!-- 比如：當message的內容長度超過10個字，就自動加上error的class -->
     <!-- <div v-bind:class="{'error': message.length > 10}"><div/> -->
 
-
+    
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
     <script>
@@ -109,6 +110,9 @@
                         completed: true,
                     }
                 ],
+                visibility: 'all',
+                cacheTodo: {},
+                cacheTitle: '',
             },
             methods: {
                 addTodo: function(){
@@ -120,7 +124,7 @@
                     this.todos.push({
                         id: timeStamp,
                         title: value,
-                        computed: false
+                        completed: false
                     });
                     this.newTodo = '';
                 },
@@ -134,8 +138,49 @@
                     })
                     // this.todos.splice(key, 1);
                     this.todos.splice(newIndex, 1);
-                }
+                },
+                editTodo: function(item){
+                    this.cacheTodo = item;
+                    this.cacheTitle = item.title;
+                },
+                cancelEdit: function(){
+                    this.cacheTodo = {}
+                },
+                doneEdit: function(item){
+                    item.title = this.cacheTitle;
+                    this.cacheTitle = '';
+                    this.cacheTodo = {}
+                },
+                removeAll: function(){
+                    this.todos = [];
+                },
             },
+            computed: {
+                filteredTodos: function(){
+                    if(this.visibility == 'all'){
+                        return this.todos;
+                    }else if(this.visibility == 'active'){
+                        var newTodos = [];
+                        this.todos.forEach(function(item){
+                            if(!item.completed){
+                                newTodos.push(item);
+                            }
+                        })
+                        return newTodos;
+                    }else if(this.visibility == 'completed'){
+                        var newTodos = [];
+                        this.todos.forEach(function(item){
+                            if(item.completed){
+                                newTodos.push(item);
+                            }
+                        })
+                        return newTodos;
+                    }
+                },
+                undoneTodos: function(){
+                    return this.todos.filter(todo => todo.completed != true);
+                }
+            }
         })
     </script>
 </body>
