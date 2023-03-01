@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mapbox</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        #map{
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+
+
+
+    <script>
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZW55YW83MTMiLCJhIjoiY2xjeThrOGRiMDNuNjNubzNwbnduY3FnayJ9.gS_cGKHkAO01wZzgoDybtQ';
+        const map = new mapboxgl.Map({
+            container: 'map', 
+            style: 'mapbox://styles/enyao713/clcyio68j000314uuyl0xshdr',
+            
+        });
+
+        console.log(map);
+        
+        function getDirection(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://api.mapbox.com/directions/v5/mapbox/driving/121.592%2C25.043%3B121.611%2C25.058?alternatives=true&geometries=geojson&language=en&overview=simplified&steps=true&access_token=pk.eyJ1IjoiZW55YW83MTMiLCJhIjoiY2xjeThrOGRiMDNuNjNubzNwbnduY3FnayJ9.gS_cGKHkAO01wZzgoDybtQ')
+            xhr.onload = function(){
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+
+                map.on('load', () => {
+                    map.addSource('route', {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'Feature',
+                            'properties': {},
+                            'geometry': {
+                                'type': 'LineString',
+                                'coordinates': [
+                                    [121.592, 25.043],
+                                    [121.611, 25.058],
+                                ]
+                            }
+                        }
+                    });
+                    map.addLayer({
+                        'id': 'route',
+                        'type': 'line',
+                        'source': 'route',
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': '#888',
+                            'line-width': 8
+                        }
+                    });
+                });
+            }
+            xhr.send();
+        }
+
+        getDirection();
+    </script>
+</body>
+</html>

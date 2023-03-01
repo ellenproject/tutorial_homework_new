@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>youtube-playlist</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #container{
+            background-color: #fff;
+        }
+        .wrap{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .wrap .box{
+            width: 90%;
+            height: 100%;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #fff;
+            transition: all .5s ease-in-out;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+        .box:hover{
+            background-color: #fafafa;
+            box-shadow: 1px 10px 10px #ccc;
+        }
+        .box:hover .link{
+            color: darkorange;
+        }
+        .box .link{
+            text-decoration: none;
+            color: #212529;
+            transition: all .5s ease-in-out;
+            width: 20%;
+        }
+        .link .title{
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="container"><div class="wrap"></div></div>
+    
+    <script>
+        
+        var wrap = document.querySelector('.wrap');
+
+        function makeRequest(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails,status&playlistId=PLBwG4wh6sKb8s1y9YzWP0bFp2uLFd84wc&maxResults=10&key=AIzaSyB7E3INlcl1i14OGRSkJqALuIiPI9JBMm8');
+            xhr.onload = function(){
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+
+                for(let i=0; i<response.items.length; i++){
+                    var item = response.items[i].snippet;
+
+                    var ytTitle = item.title;
+                    var ytListId = response.items[i].id;
+                    var ytUrl = 'https://www.youtube.com/watch?v=PMUemge7hck&list='+ytListId+'&ab_channel=FrancescoParrino';
+                    var ytVideoId = response.items[i].contentDetails.videoId
+                    var ytUrlframe = 'https://www.youtube.com/embed/'+ ytVideoId + '?rel=0'
+                    
+                    var box = document.createElement('div');
+                    box.className = 'box';
+                    var link = document.createElement('a');
+                    link.className = 'link';
+                    var title = document.createElement('h2');
+                    title.className = 'title';
+                    var iframe = document.createElement('iframe');
+                    iframe.className = 'iframe';
+
+                    iframe.setAttribute('src', ytUrlframe);
+                    iframe.setAttribute('width', '75%');
+                    iframe.setAttribute('height', '315');
+                    iframe.setAttribute('frameborder', 0);
+
+                    link.setAttribute('href', ytUrl);
+                    link.setAttribute('target', '_blank');
+                    title.innerHTML = ytTitle;
+
+                    wrap.appendChild(box);
+                    box.appendChild(link);
+                    link.appendChild(title);
+                    box.appendChild(iframe);
+                    
+                }
+                return;
+            }
+            
+            xhr.send();
+        }
+
+        makeRequest();
+
+    </script>
+</body>
+</html>
