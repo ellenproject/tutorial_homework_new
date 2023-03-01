@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax-get和post方式區別</title>
+</head>
+<body>
+    <button id="get">獲取課程信息</button>
+    <button id="add">添加課程信息</button>
+    <script>
+        //GET方式，一般用於向服務器請求數據，GET方式，如果要向服務器傳遞參睥，參數是拼接在url地址上的，
+        //url地址上最多只能拼接4mb數據
+        get.onclick = function(){
+            //01.創建ajax對象
+            let xhr = new XMLHttpRequest()
+            //02.初始化請求
+            //因為不安全、網址直接顯示數據，一般很少用get方式向服務器添加數據，而是用來請求數據
+            xhr.open('GET','./data/goods.json')
+            //03.發送請求
+            xhr.send()
+            //04.監聽讀取狀態事件函數
+            //當xhr.readyState屬性值發生變化，就會執行下面的事件函數
+            xhr.onreadystatechange = function(){
+                //狀態值為4，表示請求已經完成
+                if(xhr.readyState===4){
+                    //判斷狀態砠
+                    if(xhr.status===200){
+                        console.log(xhr.responseText);
+                    }
+                }
+            }
+        }
+
+        //POST方式，一般用於操作服務器上面的數據，比如：添加，修改，刪除
+        //GET方式，如果要向服務器傳遞參數，參數是通過請求體的方式傳遞給服務器的
+        //請求體的常用格式有兩個：application/x-www-form-urlencoded 和 application/json
+        add.onclick = function(){
+            //01.創建ajax對象
+            let xhr = new XMLHttpRequest()
+            //02.初始化請求
+            xhr.open('POST','./data/goods.json')
+            //設置請求頭裡面的Content-Type屬性值
+            xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+            //03.發送請求
+            xhr.send(`"name":"名稱","price"="價錢"`)
+            //04.監聽讀取狀態事件函數
+            //當xhr.readyState屬性值發生變化，就會執行下面的事件函數
+            xhr.onreadystatechange = function(){
+                //狀態值為4，表示請求已經完成
+                if(xhr.readyState===4){
+                    //判斷狀態砠
+                    if(xhr.status===200){
+                        console.log(xhr.responseText);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

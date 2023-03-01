@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回調函數</title>
+</head>
+<body>
+    <script>
+        
+        setTimeout(fun1, 5000);
+        function fun1(){
+            console.log('哈哈！我是方法1');
+        }
+        // 例如setTimout就是一個回調函數：一個函數裡面，再執行一個函數
+
+        function setTimeout(fun, time){
+            //在調setTimout這個函數，然後讓它做很多事：
+            console.log('1240327401');
+            console.log('4-185-5920');
+            //做到某一個環節時，又重新去執行這個參數fun()，跳出去執行，
+            //這就是回調函數
+            fun()
+        }
+
+        console.log('-------------------');
+
+        function every(arr,fn){
+            let isok = true  //數組中的所有數據是否滿足某個條件，比如數組中的數是不是都是偶數
+            //循環整個數組
+            for(let i=0; i<arr.length;i++){
+                // if(arr[i]%2===0){
+                //     console.log(arr[i]);
+                // }
+                //function方法寫好後盡量就不要動了，但if裡面的條件經常會變動，比如有的要返回奇數，有的要返回偶數
+                //這時就把if裡面的條件獨立出來，放到外面去，變成if調用的是一個方法
+                // if(arr[i]%2!==0){
+                //     isok = false
+                //     break;
+                // }
+                //原本條件是if(fn(arr[i]){})，表示當它返回true的時候就執行；
+                //改成非 = if(!fn(arr[1])), 表示當它返回ture的時候就不執行，即是當它返回false就執行
+                if(!fn(arr[i])){
+                    isok = false
+                    break;
+                }
+            }
+            return isok
+        }
+
+        let arr = [11,22,33,44,55,66]
+        console.log(every(arr,function(item){
+            //判斷大於10的數組
+            return item > 10
+        }));
+        //這個方法總共執行六次，看for循環幾次就幾次，而for是看數組的數量
+        //因為每次到if的時候就要重新調用fn這個方法去判斷，這就叫回調函數
+        //就是在every這個方法裡面，要回過頭去執行fn(arr[i]){}這個參數
+    </script>
+</body>
+</html>

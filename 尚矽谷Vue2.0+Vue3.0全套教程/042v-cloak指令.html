@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>042.v-cload指令</title>
+    
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        v-cloak指令〈沒有值﹚：
+            1.本質是一個特殊屬性，Vue實例創建完畢並接管容器後，會刪掉v-cloak屬性。
+            2.使用css配合v-cloak可以解決網速慢時頁面展示出{{xxx}}的問題。
+     -->
+    <!-- js阻塞：要等js載入才會有頁面，而js載入可以透過終端機控制時間
+        在body最下方引入js的話：就會先渲染內容，再載入js，載入後再編繹js影響body內容
+    -->
+     <div id="root">
+         <h2 v-cloak>{{name}}</h2>
+    </div>
+    
+
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <script>
+        Vue.config.productionTip = false
+
+        new Vue({
+            el:'#root',
+            data:{
+                name:'Jake',
+            }
+        })
+    </script>
+</body>
+</html> 

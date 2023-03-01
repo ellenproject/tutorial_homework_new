@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>031列表過濾_watch</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h2>人員列表</h2>
+        <input type="text" placeholder="請輸入名字" v-model="keyWord">
+        <ul>
+            <li v-for="(p, index) in filPersons" :key="index">
+                {{p.name}}  ----  {{p.age}}  ---- {{p.sex}}
+            </li>
+        </ul>
+    </div>    
+
+    <!-- 
+        任務：搜尋名字，即使只是輸入單字，也會出現有該單字的人名
+        邏輯思路：
+        1.取得輸入框的值
+            收集用戶的輸入
+            怎麼取得用戶輸入的值？
+            v-model：雙向綁定。頁面上的輸入，能夠回流到Vue的數據裡面
+        2.取得值以後，將人名作過瀘
+            過濾不是只過濾一次，什麼時候會過濾呢？
+            當用戶輸入的關鍵詞發生變化的時候，就要重新過濾。
+            那要怎麼知道用戶輸入的keyWord變了呢？=>watch
+            這題標準寫法正要用計算屬性寫，但先用watch作入門。
+            因為computed這個計算屬性可以實現的，watch都能實現。
+            那這裡就先用watch寫一遍，再用計算屬性寫一遍。
+     -->
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        new Vue({
+            el:'#root',
+            data:{
+                keyWord:'',
+                persons:[
+                    {id:'001', name: '馬冬梅', age: 19, sex: '女'},
+                    {id:'002', name: '周冬雨', age: 20, sex: '女'},
+                    {id:'003', name: '周杰倫', age: 21, sex: '男'},
+                    {id:'004', name: '溫兆倫', age: 22, sex: '男'}
+                ],
+                filPersons:[]
+            },
+            /*
+            watch:{
+                keyWord(val){
+                    // console.log('keyWord被改了',val);
+                    // 已經拿到用戶輸入的值，要來做過濾：
+                    // step1.拿到data裡persons數組
+                    // step2.數組裡的人很多，只想要符合條件的數據 => 用過濾 => filter
+                    // step3.return 匹配的條件。比如return p.age > 19，代表年齡大於19的都匹配出來
+                    //       return p.name包含val, 代表名字裡包含用戶輸入的值
+                    // step4.判斷字符串裡是否包含指定的字符，得用indexOf
+                    //        如果值超出匹配條件就會返回-1，因此只要不等於-1，就代表匹配上了。
+                    // 注意：filter 返回的會一個全新的數組，比如你的數組是[1,2,3,4]，要過濾偶數，那返回的[2,4]會是全新數組
+                    // 這個新數組如果你不用，那要怎麼影響頁面變化呢？拿persons過濾出來(this.persons.filter((p)=>{}))的新數組，
+                    // 重新交給persons(this.persons  = this.persons.filter((p)=>{}))，那persons就會變了。
+                    // 意即：要讓原數組=新數組、來用到返回的新數組，頁面才會變化
+                    // 注意：但如果動到原數組，就會越搜索越少，所以原數組persons不能動(不能把新數組直接取代原數組)，另外建一個數組filPersons
+                    // 一個字符串裡indexOf一個空的字符串，數組包不包含空字符串？包含！比如'abcde'.indexOf('')出現結果0，而不是-1
+                    // 這樣就變成：隨便輸入一個字，然後再刪掉那個字，就會出現數據馬周周溫。但總不能寫個提示請你打個字再刪掉就有數據
+                    // 所以不要把監視寫簡寫形式，把監視寫成完整形式，handler正常寫出來，畢竟原來的函數本來就是作為handler的函數體。然後再加上immediate
+                    // immediate，不等你去改變，就已經調了一次handler，意思是用戶什麼也沒輸入，就調用了handler，那值val就是一個空字符串，數據就出來了
+                    this.filPersons = this.persons.filter((p)=>{
+                        return p.name.indexOf(val) !== -1
+                    })
+                }
+            }
+            */
+           watch:{
+               keyWord:{
+                   immediate: true,
+                   handler(val){
+                       this.filPersons = this.persons.filter((p)=>{
+                           return p.name.indexOf(val) !== -1
+                       })
+                   }
+               }
+           }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>046自定義指令_對象式</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        自定義指令總結：
+        1.定義語法：
+            (1).局部指令：
+                new Vue({                               new Vue({
+                    directives:{指令名：配置對象}   或      directives(指令名：回調函數)  
+                })                                      })
+            (2).全局指令：
+                Vue.directive(指令名,配置對象)      或    Vue.directive(指令名,回調函數)
+        2.配置對象中常用的3個回調：
+            (1).bind:指令與元素成功綁定時調用。
+            (2).inserted：指令所在元素被插入頁面時調用。
+            (3).update：指令所在模板結構被重新解析時調用。
+        3.備註：
+            (1).指令定義時不加v-，但使用時要加v-：
+            (2).指令名如果是多個單詞，要使用kebab-case命名方式(ex.big-number)，不要用camelCase命名(ex.bigNumber)。
+    -->
+    
+    
+    <!-- 
+        需求2.定義一個v-fbind指令，和v-bind功能類似，但可以讓其所綁定的input元素默認獲取焦點。
+    -->
+    
+
+    <div id="root">
+        <h2>{{name}}</h2>
+        <h2>當前的n值是：<span v-text="n"></span></h2>
+        <h2>放大10倍後的n值是：<span v-big="n"></span></h2>
+        <!-- <h2>放大10倍後的n值是：<span v-big-number="n"></span></h2> -->
+        <button @click="n++">點我n+1</button>
+        <hr>
+        <input type="text" v-fbind:value="n">
+    </div> 
+    
+
+    
+    <script>
+        Vue.config.productionTip = false
+        
+        //定義全局指令：directive
+        //比如有兩個容器，#root1跟#root2都可以使用全局指令
+        /*
+        Vue.directive('fbind', {
+            bind(element,binding){
+                element.value = binding.value
+            },
+            inserted(element,binding){
+                element.focus()
+            },
+            update(element,binding){
+                element.value = binding.value
+            }
+        })
+        */
+
+        new Vue({
+            el:'#root',
+            data:{
+                name:'Jake',
+                n:1,
+            },
+            directives:{
+                //big的element是指span
+                //big指令和fbind指令都是屬於局部指令，局部指令意思是只能給new Vue使用，別人用不了
+                //比如有兩個容器，#root1跟#root2，局部指令就只能給#root1使用，第二個容器#root2用不了
+                big(element,binding){
+                    console.log('big',this);
+                    element.innerText = binding.value * 10
+                },
+                // 如果有-，那寫法就要用完整寫法'big-number':function(){}或'big-number'()
+                /*
+                'big-number'(element,binding){
+                    element.innerText = binding.value * 10
+                }
+                */
+                //fbind的element是指input
+                /*
+                fbind(element,binding){
+                    element.value = binding.value
+                    element.focus()
+                    //element.focus()沒問題，而是執行的時機有問題﹙詳見demo：頁面上要先有input才能操作input﹚
+                    //那就要分析一下fbind()是什麼時候被調用：
+                    //因為fbind只要一調用，element.focus()就執行了
+                    //問題出在：指令與元素成功綁定時﹙一上來﹚：
+                    //指令指v-fbind，元素指input，成功綁定。注意：它是說綁定，而不是成功放入頁面
+                    //綁定成功僅是在內存裡建立了關係，input元素並沒有跑到頁面，既然還沒跑到頁面，那element.focus()當然不奏效
+                    //只要把fbind寫成函數，這個功能﹙一上來就獲取焦點﹚就沒辦法實現，因為fbind寫成函數後，只有兩個時候會被調用：
+                    //1.指令與元素成功綁定時﹙一上來﹚ 2.指令所在的模板被重新解析時
+                    //根本拿不到時間點，不知道什麼時候放入頁面
+                    //因此不要把fbind寫成函數，要把fbind寫成對象
+                    //在這個fbind對象裡，可以放很多個函數，比如a(){}，b(){}，c(){}，Vue跟你說，我會在特殊的時刻幫你調特殊的函數
+                    //比如，一旦我把元素放入頁面了，就幫你調一下b函數。這樣就得到關鍵的時間點了。函數名是固定的，不是abc這樣亂取：
+                    //bind(){}，inserted(){}，update(){}
+                }
+                */
+               
+                fbind:{
+                    //指令與元素成功綁定時﹙一上來﹚
+                    bind(element,binding){
+                        //注意，此處的this是指window
+                        // 所有指令﹙ex.directives﹚裡面的this，都是指向window，而不是vm。Vue沒有管指令裡的this
+                        //指令就是讓你操作元素的，把元素element給你了，也把綁定相關的信息binding給你了，那其他的就別管了，也別管vm，
+                        //如果需要數據，就是以n的形式傳進來
+                        console.log('fbind-bind',this);
+                        element.value = binding.value
+                    },
+                    //指令與所在元素被插入頁面時
+                    inserted(element,binding){
+                        console.log('fbind-inserted',this);
+                        element.focus()
+                    },
+                    //指令所在的模板被重新解析時
+                    update(element,binding){
+                        console.log('fbind-update',this);
+                        element.value = binding.value
+                    }
+                }
+                
+                //bind()，inserted()，update()都是函數，
+                //Vue會在不同時刻，幫忙調用不同的函數
+            }
+        })
+    </script>
+</body>
+</html>

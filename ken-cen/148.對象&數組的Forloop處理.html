@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" conten t="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>對象&數組的For loop處理</title>
+</head>
+<body>
+    <h1>Learning Javascript</h1>
+
+    <script type="text/javascript">
+        const person = {
+            name: "Ken",
+            age: 21,
+        }
+        
+        //如何用for循環讀取到name跟age
+        //使用for in：用在對象object
+        //我們希望讀取到，對象(此指person)裡面的每一個屬性(此指property)
+        for(const property in person){
+            console.log(property) ; //讀到屬性
+            console.log(person[property]); //讀到屬性的值
+        }
+
+        const numbers = [5, 6, 9];
+        
+        //如果使用for in要一個個讀取會比較麻煩
+        //使用for of：用在陣列array
+        //定義numbers裡的成員是n
+        for (const n of numbers){
+            console.log(n);
+        }
+
+        //除了for循環以外，還有一個方法可以處理array
+        //是array裡面的方法，forEach
+        //forEach有一個返回的對象做為參數，換句話說，
+        //可以透過forEahc返回array裡面對應的值跟index
+        numbers.forEach((value, index) =>{
+            console.log(value);
+            console.log(index);
+        })
+
+        console.log('-------------------------------');
+
+        class Person{
+            constructor(_name, _age){
+                this.name = _name;
+                this.age = _age;
+            }
+            describe(){
+                console.log(`I am ${this.name} and I am ${this.age} years old.`);
+            }
+        }
+
+        class Programmer extends Person{
+            constructor(_name, _age, _yearOfExperience){
+                super(_name, _age);
+                
+                this.yearOfExperience = _yearOfExperience;
+            }
+            code(){
+                console.log(`${this.name} is coding.`);
+            }
+        }
+
+
+        //注意：這裡不用for in，而是用for of，因為是處理array，而不是處理object
+        const programmers = [
+            new Programmer("Ken", 21, 12), 
+            new Programmer("Jeff", 31, 10)
+        ]
+
+        //方法一：定義prog是數組(programmers)裡面的成員
+        for (const prog of programmers){
+            prog.code();
+        }
+
+        console.log('-------------------------------');
+
+        //方法二：用forEach：
+        // programmers.forEach(value => {
+        //     value.code();
+        // })
+        programmers.forEach(value => value.code());
+
+    </script>
+</body>
+</html>

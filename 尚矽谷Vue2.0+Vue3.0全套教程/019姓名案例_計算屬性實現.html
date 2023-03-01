@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>019姓名案例_計算屬性實現</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        計算屬性就是拿著已經寫完的屬性(即data裡面的資料)去加工、去計算，生成一個全新的屬性，這就是計算屬性，
+        比如：把data裡的firstName跟lastName加起來，生成一個fullName的屬性，這個fullName因為是計算出來的，就稱為計算屬性。
+        data裡放的是屬性，computed放的是計算屬性，兩個要分開，不能把計算屬性放在data裡。
+     -->
+     <!-- 
+        計算屬性：
+            1.定義：要用的屬性不存在，要通過已有屬性計算得來。
+                注意：是已有「屬性」；如果是已有變量、已有數據是計算不到的，
+                比如let a = 1, 那就算在網頁上改動a=9，也不會改動頁面上的a=1。
+            2.原理：底層借助了Object.defineproperty方法提供的getter和setter 
+            3.get函數什麼時候執行？
+                (1).初次讀取時會執行一次。
+                (2).當依賴的數據發生改變時會被再次調用。
+            4.優勢：與methods實現相比，內部有緩存機制﹙複用﹚，效率更高，調試方便。
+            5.備註：
+                (1).計算屬性最終會出現在vm上，直接讀取使用即可。
+                (2).如果計算屬性要被修改，那必須寫set函數去響應修改，且set中要引起計算時依賴的數據發生
+      -->
+    <div id="root">
+        姓：<input type="text" v-model="firstName"> <br/><br/>
+        名：<input type="text" v-model="lastName"> <br/><br/>
+        測試：<input type="text" v-model="x"> <br/><br/>
+        全名：<span>{{fullName}}</span> 
+    </div>
+
+
+    <script>
+        Vue.config.productionTip = false
+ 
+        const vm = new Vue({
+            el: '#root',
+            data:{
+                firstName: '張',
+                lastName:'三',
+                x: '你好'
+            },  //Vue認為data裡面的是屬性。firstName是屬性名，'張'是屬性值。
+            computed:{
+                fullName:{
+                    //get有什麼作用？當有人讀取fullName的，get就會被調用，且返回值就作為fullName的值。
+                    //get什麼時候調用？1. 初次讀取fullName時。2. 所依賴的數據發生變化時。
+                    get(){
+                        console.log('get被調用了');
+                        console.log(this); //此處的this是vm
+                        return this.firstName + '-' + this.lastName
+                    },
+                    //set什麼時候調用？當fullName被修改時。
+                    set(value){
+                        console.log('set',value);
+                        const arr = value.split('-')
+                        this.firstName = arr[0]
+                        this.lastName = arr[1]
+                    }
+                }
+                //注意：fullName沒有真正的值，都是從data算的，而且每算一次就會緩存。那想改怎麼辦？
+                //因為fullName是算出來的，就得看它是從哪算出來的然後去改掉，因此要改data。
+                //回頭去看數據代理，有人的年齡，當以後有人想改人的年齡時，要在set裡面的number給它改掉。
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>展開運算符</title>
+</head>
+<body>
+    <script>
+        let arr1 = [11, 22, 33]
+        let arr2 = [44, 55, 66]
+        //...展開運算符，可以將數組中的全部成員展開
+        let arr3 = [...arr1, ...arr2]  //相當於 let arr3 = [11,22,33, 44,55,66]
+        console.log(arr3);
+        console.log('------------------');
+
+        let obj1 = {
+            name: '周杰倫',
+            age: 20, 
+            sex: '男',
+            car:{
+                name: '大眾',
+                price: '20萬'
+            }
+        }
+
+
+        //…展開元素符，可以將對象中的全部成員展開
+        //就相當於將當前對象中的成員複製一份給另一個對象。注意：這裡是淺拷貝。
+        let obj2 = {...obj1}
+        console.log(obj1);
+        obj2.name = '蔡依琳'
+        obj2.age = 30
+        obj2.sex = '女'
+        obj2.car.name = '保時捷'
+        obj2.car.price = '30萬'
+        console.log(obj2);
+        console.log('----------------------');
+
+        function fun1(a,b,c,d){
+            console.log(arguments);
+            [...arguments].forEach(r=>{
+                console.log(r);
+            })
+        }
+        fun1(100, 200, 300, 400, 500, 600, 700, 800, 900)
+        
+    </script>
+</body>
+</html>

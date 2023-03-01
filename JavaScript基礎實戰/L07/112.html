@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型對象的具體用法</title>
+</head>
+<body>
+
+    <script>
+        //定義一個學生類型
+        function Student(name, age, sex){
+            //學生的屬性
+            this.name = name
+            this.age = age
+            this.sex = sex
+            //學生的方法
+            this.sayHi = function(){
+                console.log(`大家好！我叫${this.name}，性別是${this.sex}，今年${this.age}歲`);
+            }
+            this.study = function(){
+                console.log('我每天學習很刻苦');
+            }
+        }
+        //類型身上的prototype屬性是類型的原型對象
+        //將來根據該類型創建出來的每個實例對象身上也有一個__proto__屬性，是實例對象的原型對象
+        //所有實例對象身上的原型對象，都指向類型的原型對象
+        //所以，所有的__proto__都指向同一個prototype
+        console.log(Student.prototype);
+        Student.prototype.play = function(){
+            console.log('學生喜歡玩…');
+        }
+        Student.prototype.eat = function(){
+            console.log('學生喜歡吃…');
+        }
+
+        //創建三個學生對象
+        let s1 = new Student('張三', 20, '男')
+        console.log('s1',s1.__proto__);
+        let s2 = new Student('李四', 22, '女')
+        console.log('s2',s2.__proto__);
+        let s3 = new Student('王五', 24, '男')
+        console.log('s3',s3.__proto__);
+        console.log(s1);
+        console.log(s2);
+        console.log(s3);
+        console.log('------------------------------');
+        //注意：原型對象上面的成員，一般都是直接使用，不要輕易修改。
+        //因為改了原型對象上面的成員，其它所有使用到原型對象的s1, s2, s3都會跟著改了。
+        //比如，prototype.eat = 學生喜歡吃…，改了之後變成prototype.eat = 吃土…，所有s1, s2, s3都變成吃土
+        s2.__proto__.eat = function(){
+            console.log('吃土…');
+        }
+
+        s1.sayHi()
+        s1.study()
+        //對象的原型對象上面的成員，對象可以直接使用
+        s1.play()
+        s1.eat()
+
+        
+
+
+        
+    </script>
+    
+</body>
+</html>

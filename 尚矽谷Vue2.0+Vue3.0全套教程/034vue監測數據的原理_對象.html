@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>034Vue監測數據的原理_對象</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- Vue監測數據改變的原理 -->
+    <div id="root">
+        <h2>學校名稱：{{name}}</h2>
+        <h2>學校地址：{{address}}</h2>
+    </div>    
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        const vm = new Vue({
+            el:'#root',
+            data:{
+                name: 'Jake',
+                address: 'Taipei',
+                student:{
+                    name:'tom',
+                    age:{
+                        rAge: 40,
+                        sAge: 29
+                    },
+                    friends:[
+                        {name: 'Jerry', age: 35}
+                    ]
+                }
+            },
+            //數據代理步驟：
+            //step1.加工data：見以下原始data與_data，所謂加工，就是把data裡面一組key value都形成getter、setter的寫法
+                //原始data
+                    /*
+                    data:{
+                        name: 'xxx',
+                        address: 'xx'
+                    }
+                    */
+                //_data
+                    /*
+                        vm._data
+                        address:(...)
+                        name:(...)
+                        get address
+                        set address
+                        get name
+                        set name
+                    */
+            //step2.vm._data = data，即上面_data。
+            //加工後就可以做響應式了，響應式指：數據變了頁面也跟著變，當有一天修改了name的時候就會引起setter裡面name的調用
+            //setter裡面寫了一個調用，這個調用可以重新解析界面﹙頁面跟著變﹚
+            //只要給name匹配一個setter，那麼當name發生變化就會知道。
+            //name一改，setter就調，setter一調就重新解析界面，界面重新解析就生成新虛擬DOM，然後新舊DOM對比，然後更新頁面。
+            //有人就想挑戰一下不用加工data也能實現數據監視，真的可以嗎？來試試看
+        })
+    </script>
+</body>
+</html>

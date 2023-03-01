@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用JS聯動按鈕與文字</title>
+</head>
+<body>
+    <h1>Learning Javascript</h1>
+    <button id="clickBtn1">點擊我！</button>
+    <p id="changeText1">改變這段文字</p>
+
+    <button id="clickBtn2">點擊我！</button>
+    <p id="changeText2">我想添加：<div id="add"></div></p>
+
+    <button id="clickBtn3">點擊我！</button>
+    <p id="changeText3">
+        
+    </p>
+    <script>
+        
+        document.getElementById('clickBtn1').onclick = function(){
+            let text = document.getElementById('changeText1');
+            text.innerText = "文字改變囉！";
+        }
+        document.getElementById('clickBtn2').onclick = function(){
+            let text = document.getElementById('add');
+            add.innerText = "這是一個div";
+        }
+        document.getElementById('clickBtn3').onclick = function(){
+            let text = document.getElementById('changeText3');
+            let str1 = `<div class="red" style="color: violet; font-size: 24px; font-weight: bold;">這段文字是紫的</div>`;
+            let str2 = `<div class="blue" style="color: skyblue; font-size: 16px; font-weight: regular;">這段文字是藍的</div>`
+            text.innerHTML = str1 + str2;
+        }
+    </script>
+</body>
+</html>

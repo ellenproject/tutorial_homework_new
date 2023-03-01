@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>010理解MVVM</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        MVVM模型
+            1.M：模型(Model)：data中的數據
+            2.V：視圖(View)：模板代碼
+            3.VM：視圖模型(ViewModel)：Vue實例
+        觀察發現：
+            1.data中所有的屬性，最後都出現在了vm身上。
+            2.vm身上所有的屬性 及 Vue原型上所有屬性，在Vue模板中都可以直接使用。
+    -->
+
+
+    <!-- 準備好一個容器 -->
+    <div id="root">
+        <h1>學校名稱：{{name}}</h1>
+        <h1>學校地址：{{address}}</h1>
+        <!-- 
+        <h1>測試一下1：{{1+1}}</h1>
+        <h1>測試一下2：{{$options}}</h1>
+        <h1>測試一下3：{{$emit}}</h1>
+        <h1>測試一下4：{{_c}}</h1>
+        -->
+    </div>
+    
+
+
+    <script>
+        Vue.config.productionTip = false  //阻止Vue在啟動時生成生產提示
+
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                name: 'Jake',
+                address: '台北',
+            }
+        })
+        console.log(vm);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>條件判斷語句</title>
+    <style>
+        p{
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Learning Javascript</h1>
+
+    <input type="text">
+    <button>執行操作</button>
+    <p></p>
+
+    <script>
+        var myVal = document.getElementsByTagName('input')[0].value;
+        var myAge = 15;
+
+        var output = "";
+
+        document.getElementsByTagName('button')[0].onclick = function(){
+            // myVal = myVal = document.getElementsByTagName('input')[0].value;
+            // if(myVal === "Ken"){
+            //     document.getElementsByTagName('p')[0].innerText = "你猜對了我的名字";
+            //     alert('true');
+            // }else if(myVal === "Tom"){
+            //     document.getElementsByTagName('p')[0].innerText = "你猜對了我朋友的名字";
+            // }else{
+            //     document.getElementsByTagName('p')[0].innerText = "你猜錯了我的名字";
+            //     alert('false');
+            // }
+            // if(myAge >= 18){
+            //     document.getElementsByTagName('p')[0].innerHTML = "你已經成年！";
+            // }else{
+            //     document.getElementsByTagName('p')[0].innerHTML = "你還沒成年！";
+            // }
+            output = myAge >= 18 ? "你已經成年！" : "你還沒成年！";
+            document.getElementsByTagName('p')[0].innerHTML = output;
+        }
+    </script>
+</body>
+</html>

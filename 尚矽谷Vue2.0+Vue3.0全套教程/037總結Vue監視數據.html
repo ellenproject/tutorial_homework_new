@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>037總結Vue監視數據</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        Vue監視數據的原理：
+        1.vue會監視data中所有層次的數據。
+            ex.可以監測student，也可以監測student裡面的name
+        
+        2.如何監測對象中的數據？
+            通遇setter實現監視，且要在new Vue時就傳入要監測的數據。
+            (1).對象中後追加的屬性，Vue默認不做響應式處理
+            (2).如需給後添加的屬性做響應式，請使用如下API：
+                Vue.set(target, propertyName/index, value) 或
+                vm.$set(target, propertyName/index, value)
+            ex.一開始在data:{}裡寫好的數據，之後想要再加數據，那之後再加上的數據Vue不會做響應式，
+                如果要給之後再加上的數據也響應式，就用Vue.set()或vm.$set
+            
+        3.如何監測數組中的數據？
+            通過包裏數組更新元素的方法實現，本質就是做了兩件事：
+            (1).調用原生對應的方法對數組進行更新。
+            (2).重新解析模板，進而更新頁面。
+        
+        4.在Vue修改數組中的某個元素一定要用如下方法：
+            (1).使用這些API：push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+            (2).Vue.set() 或 vm.$set()
+        
+        特別注意：Vue.set() 和 vm.$set() 不能給vm 或 vm的根數據對象 添加屬性！！！
+        ex.this.student.friends[0]不會奏效，this.student.friensd[0].name會奏效
+     -->
+
+     <!-- 
+        數據劫持
+        原始數據
+        /*
+            data:{
+                student:{
+                    name:'tom',
+                    age:18,
+                    hobby:[
+                        '抽菸',
+                        '喝酒',
+                        '燙頭',
+                    ],
+                    friends:[
+                        {name: 'Jerry', age: 35},
+                        {name: 'Tony', age: 36}
+                    ]
+                },
+            },
+        */
+        劫持後的數據
+        /*
+            vm._data
+                {__ob__: Observer}
+                    student: (...)
+                    __ob__: Observer {value: {…}, shallow: false, mock: false, dep: Dep, vmCount: 1}
+                    get student: ƒ reactiveGetter()
+                    set student: ƒ reactiveSetter(newVal)
+                    [[Prototype]]: Object
+        */
+        如果不劫持，就是原始數據的樣子，以後要改任何屬性，Vue也不知道，
+        但如果把傳入的data裡面的屬性都遍歷了一遍，都變成getter setter的形式，
+        這種變化 行為 操作就叫做數據劫持
+        想像成，如果有人改了student，然後setter出面劫持說站住，你要改成什麼值，你給我看看，劫持後它做了兩件事
+        1.它確實收到你的數據，給你正常改數據
+        2.重新解析模版 界面
+      -->
+
+
+
+    
+    <!-- Vue監測數據改變的原理 -->
+    <div id="root">
+        <h1>學生信息</h1>
+
+        <button @click="student.age++">年齡+1歲</button> <br>
+        <button @click="addSex">添加性別屬性，默認值：男</button> <br>
+        <button @click="student.sex = '未知' ">修改性別</button> <br>
+        <button @click="addFriend">在列表首位添加一個朋友</button> <br>
+        <button @click="updateFirstFriendName">修改第一個朋友的名字為：張三</button> <br>
+        <button @click="addHobby">添加一個愛好</button> <br>
+        <button @click="updateHobby">修改第一個愛好為：開車</button> <br>
+        <button @click="removeSmoke">過濾掉愛好中的抽菸</button>
+
+        <h3>姓名：{{student.name}}</h3>
+        <h3>年齡：{{student.age}}</h3>
+        <h3 v-if="student.sex">性別：{{student.sex}}</h3>
+        <h3>愛好：</h3>
+        <ul>
+            <li v-for="(h,index) in student.hobby" :key="index">
+                {{h}}
+            </li>
+        </ul>
+        <h3>朋友們：</h3>
+        <ul>
+            <li v-for="(f, index) in student.friends" :key="index">
+                {{f.name}}  ---  {{f.age}}
+            </li>
+        </ul>
+    </div>
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        const vm = new Vue({
+            el:'#root',
+            data:{
+                student:{
+                    name:'tom',
+                    age:18,
+                    hobby:[
+                        '抽菸',
+                        '喝酒',
+                        '燙頭',
+                    ],
+                    friends:[
+                        {name: 'Jerry', age: 35},
+                        {name: 'Tony', age: 36}
+                    ]
+                },
+            },
+            methods: {
+                addSex(){
+                    // Vue.set(this.student, 'sex', '男')
+                    this.$set(this.student, 'sex', '男')
+                }, 
+                addFriend(){
+                    this.student.friends.unshift({name:'jack', age:70})
+                },
+                updateFirstFriendName(){
+                    //注意：索引值不會有getter setter，但索引內的屬性會有getter setter
+                    //this.student.friends[0]不會奏效
+                    //this.student.friensd[0].name會奏效
+                    this.student.friends[0].name = '張三'
+                },
+                addHobby(){
+                    this.student.hobby.push('學習')
+                },
+                updateHobby(){
+                    // this.student.hobby.splice(0, 1, '開車')
+                    // Vue.set(this.student.hobby, 0, '開車')
+                    this.$set(this.student.hobby, 0, '開車')
+                },
+                removeSmoke(){
+                    this.student.hobby = this.student.hobby.filter((h)=>{
+                        return h !== '抽菸'
+                    })
+                    //filter不會引起原數組的改變，Vue也沒有包裏filter，Vue只包裏那七個增刪改查
+                    //解法，前面重新放一次this.student.hobby，意思是不通過數組的下標進行賦值，
+                    //而是直接把數組用this.student.hobby替換掉了。即以下
+                    //用this.student.hobby.filter((h)=>{return h !== '抽菸'}) 幹掉抽菸的數組，把原本的愛好this.student.hobby替掉了
+                }
+            },
+        })
+    </script>
+</body>
+</html>

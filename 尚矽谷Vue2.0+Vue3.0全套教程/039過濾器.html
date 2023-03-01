@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>039過濾器</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <script type="text/javascript" src="./js/dayjs.min.js"></script>
+</head>
+<body>
+    <!-- 
+        過濾器：
+        定義：對要顯示的數據進行特定格式化後再顯示﹙適用於一些簡單邏輯的處理﹚。  //ex.電商會有1999元，要改成1,999元，這種簡單邏輯。
+        語法：
+            1.註冊過濾器：Vue.filter(name,callback) 或 new Vue{filters:{}}  //前者：全局過濾。後者：局部過濾
+            2.使用過濾器：{{xxx | 過濾器名}} 或 v-bind:屬性 = "xxx | 過濾器名"  //前者用最多，後者用較少
+        備註：
+            1.遇濾器也可以接收額外參數、多個過濾器也可以串聯  //比如把time作為額外參數
+            2.並沒有改變原本的數據，是產生新的對應的數據  //比如時間戳本身沒有改變，而是產生新的時間戳格式
+     -->
+    <!-- 
+        過濾器是Vue提供的新的一個數據處理的方式，不是一定要用，拿計算屬性computed，或拿methods也可以寫。
+        ex.拿已經存在的屬性1667469615208，計算出全新的屬性﹙年月日時分秒﹚，這個全新屬性是格式化後、人們能看懂的，
+        那封裝一個方法，配置在methods裡面，去調用那個methods，再加工一下，一樣可以。
+    -->
+    <div id="root">
+        <h2>顯示格式化後的時間</h2>
+        <!-- 計算屬性實現 -->
+        <h3>現在是：{{fmtTime}}</h3>
+        <!-- methods實現 -->
+        <h3>現在是：{{getFmtTime()}}</h3>
+        <!-- 過濾器實現 -->
+        <!-- 把time當參數，傳給timeFormater這個函數。Vue調用完timeFormater的返回值會把整個{{}}替換掉。 -->
+        <h3>現在是：{{time | timeFormater}}</h3>
+        <!-- 過濾器實現﹙傳參﹚ -->
+        <!-- time作為參數，傳給timeFormater，timeFormater工作過後的結果繼續傳給mySlice。time不會直接交給mySlice處理，而是一層一層的。
+            time作為timeFormater的第一個參數('YYYY_MM_DD')傳進去的，('YYYY_MM_DD')就作為第二個參數傳給timeFormater。
+            至於傳給mySlice的是什麼？完全靠dayjs(value)的返回值
+        -->
+        <h3>現在是：{{time | timeFormater('YYYY_MM_DD') | mySlice}}</h3>
+        <h3 :x="msg | mySlice">Jake</h3>
+    </div>
+
+    <div id="root2">
+        <h2>{{msg | mySlice}}</h2>
+    </div>
+
+
+
+    <script>
+        Vue.config.productionTip = false
+        //全局過濾器
+        Vue.filter('mySlice', function(value){
+            return value.slice(0,4)
+        })
+
+
+        new Vue({
+            el:'#root',
+            data:{
+                time: 1667469615208, //時間戳，在console寫Date.now()即得現在時間
+                msg: '你好，Jake'
+            },
+            computed:{
+                fmtTime(){
+                    return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss')
+                }
+            },
+            methods:{
+                getFmtTime(){
+                    return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss')
+                }
+            },
+            //局部過濾器
+            filters:{
+                timeFormater(value, str = 'YYYY年MM月DD日 HH:mm:ss'){
+                    // console.log('@',value);
+                    return dayjs(value).format(str)
+                },
+            }
+        })
+
+        new Vue({
+            el:'#root2',
+            data:{
+                msg:'hello, Jake',
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>如何將Class綁定網頁Element</title>
+    <style>
+        #myList{
+            font-size: 2rem;
+            color: darkmagenta;
+        }
+    </style>
+</head>
+<body>
+    <h1>Class Binding HTML List</h1>
+    <ul id="myList">
+        <li>Item 1</li>
+        <li>Item 2</li>
+    </ul>
+
+    <script src="./js/BindingList.js"></script>
+    <script>
+        //先用javascript指向該元素：myList
+        //把該元素作為class的一個參教，然後在參數裡面加以處理
+        const myList = document.getElementById("myList");
+
+        //為了使用到BindingList.js裡面的class，所以要創建一個具體的對象
+        //把myList作為class的參數放進去constructor(_element)，BindingList(myList)
+        const bindingList = new BindingList(myList);
+
+        bindingList.update();
+    </script>
+</body>
+</html>

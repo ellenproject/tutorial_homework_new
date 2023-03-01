@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜個隨機數</title>
+    <style>
+        .box{
+            width: 200px;
+            height: 200px;
+            background-color: gold;
+        }
+    </style>
+</head>
+<body>
+    <h1>請猜一個從0到3的整數</h1>
+
+    <input type="text">
+    <button>執行操作</button>
+    <p></p>
+    <div class="box"></div>
+
+    <script>
+        
+        
+        document.getElementsByTagName('button')[0].onclick = function(){
+            // let myVal = document.getElementsByTagName('input')[0].value;
+            // let text = document.getElementsByTagName('p')[0];
+            
+            // switch(myVal){
+            //     case '0':{
+            //         text.innerHTML = "你輸入的答案是"+myVal+"，猜錯囉，再試一次";
+            //         break;
+            //     }
+            //     case '1':{
+            //         text.innerHTML = "你輸入的答案是"+myVal+"，猜錯囉，再試一次";
+            //         break;
+            //     }
+            //     case '2':{
+            //         text.innerHTML = "猜對了！恭喜~~";
+            //         break;
+            //     }
+            //     case '3':{
+            //         text.innerHTML = "你輸入的答案是"+myVal+"，猜錯囉，再試一次";
+            //         break;
+            //     }
+            // }
+
+            // let x = 2;
+            y = Math.random() * 4;
+            y = Math.floor(y);
+
+            if(y == document.getElementsByTagName('input')[0].value){
+                document.getElementsByTagName('p')[0].innerHTML = "猜對了！"
+            }else{
+                document.getElementsByTagName('p')[0].innerHTML = "猜錯了！隨機數是" + y;
+            }
+
+        }
+    </script>
+</body>
+</html>

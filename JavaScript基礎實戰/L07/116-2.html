@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax-監聽狀態的事件</title>
+</head>
+<body>
+    <button id="btn">發送ajax</button>
+    <p class="text"></p>
+    <script>
+        btn.onclick = function(){
+            //創建ajax請求json文件
+            //01.創建ajax對象
+            let xhr = new XMLHttpRequest()
+            //02.初始化請求
+            xhr.open('GET','./data/goods.json')
+            //03.發送請求
+            xhr.send()
+            //04.監聽讀取狀態事件函數
+            //當xhr.readyState屬性值發生變化，就會執行下面的事件函數
+            xhr.onreadystatechange = function(){
+                //狀態值為4，表示請求已經完成
+                if(xhr.readyState===4){
+                    //判斷狀態碼, 狀態碼是服務器返回的，服務器成功的狀態碼是200
+                    if(xhr.status===200){
+                        document.querySelector('.text').innerText = xhr.responseText
+                        console.log(xhr.responseText);
+                    }
+                };
+            }
+        }
+
+    </script>
+</body>
+</html>

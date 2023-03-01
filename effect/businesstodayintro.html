@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cd-scrolling</title>
+    <link rel="stylesheet" href="./css/businesstodayintro.css">
+</head>
+<body>
+    <!-- <a href="https://event.businesstoday.com.tw/2018/2018CloudGateProject/03_intro.html">來源</a> -->
+
+    <main class="cd-main-content">
+        <nav id="nav" role="navigation">
+            <div id="menuToggle">
+                <input type="checkbox">
+                <span></span>
+                <span></span>
+                <span></span>
+                <ul id="ham_menu">
+                    <a href="01_index.html">
+                        <li class="linkto1">首頁</li>
+                    </a>
+                    <a href="02_time.html">
+                        <li class="linkto2">雲門時空</li>
+                    </a>
+                    <a href="03_intro.html">
+                        <li class="linkto3">楔子</li>
+                    </a>
+                    <a href="04_dog.html">
+                        <li class="linkto4">九妹</li>
+                    </a>
+                    <a href="05_head.html">
+                        <li class="linkto5">稽首</li>
+                    </a>
+                    <a href="06_famen.html">
+                        <li class="linkto6">法門</li>
+                    </a>
+                    <a href="07_goodbye.html">
+                        <li class="linkto7">雜物何有時</li>
+                    </a>
+                </ul>
+            </div>
+        </nav>
+        <div class="cd-fixed-bg cd-bg-1">
+            <h1>Subtitle</h1>
+        </div>
+        <div class="cd-scrolling-bg cd-color-2">
+            <div class="cd-container">
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores quidem ipsam quos perspiciatis odit dolore esse itaque laboriosam ullam totam, numquam officia veritatis sunt aperiam blanditiis optio voluptatum. Magnam maiores saepe possimus suscipit nemo reprehenderit sed necessitatibus sunt. Dignissimos provident aliquid necessitatibus nostrum accusantium autem fugiat esse et eum. Consectetur.</p>
+            </div>
+        </div>
+        <div class="cd-fixed-bg cd-bg-2">
+            <h2>title</h2>
+        </div>
+        <div class="cd-scrolling-bg cd-color">
+            <div class="cd-container">
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores quidem ipsam quos perspiciatis odit dolore esse itaque laboriosam ullam totam, numquam officia veritatis sunt aperiam blanditiis optio voluptatum. Magnam maiores saepe possimus suscipit nemo reprehenderit sed necessitatibus sunt. Dignissimos provident aliquid necessitatibus nostrum accusantium autem fugiat esse et eum. Consectetur.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident est quam possimus officia deserunt, temporibus vel minima id quaerat recusandae!</p>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores quidem ipsam quos perspiciatis odit dolore esse itaque laboriosam ullam totam, numquam officia veritatis sunt aperiam blanditiis optio voluptatum. Magnam maiores saepe possimus suscipit nemo reprehenderit sed necessitatibus sunt. Dignissimos provident aliquid necessitatibus nostrum accusantium autem fugiat esse et eum. Consectetur.</p>
+            </div>
+        </div>
+        <div class="cd-fixed-bg cd-bg-3">
+            <h2>title</h2>
+        </div>
+        <div class="cd-scrolling-bg cd-color">
+            <div class="cd-container">
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores quidem ipsam quos perspiciatis odit dolore esse itaque laboriosam ullam totam, numquam officia veritatis sunt aperiam blanditiis optio voluptatum. Magnam maiores saepe possimus suscipit nemo reprehenderit sed necessitatibus sunt. Dignissimos provident aliquid necessitatibus nostrum accusantium autem fugiat esse et eum. Consectetur.</p>
+            </div>
+        </div>
+        <div class="cd-fixed-bg cd-bg-4">
+            <h2>title</h2>
+        </div>
+        <div class="cd-scrolling-bg cd-color">
+            <div class="cd-container">
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit perspiciatis autem tenetur hic quaerat esse excepturi animi quibusdam? Tempora, natus!</p>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores quidem ipsam quos perspiciatis odit dolore esse itaque laboriosam ullam totam, numquam officia veritatis sunt aperiam blanditiis optio voluptatum. Magnam maiores saepe possimus suscipit nemo reprehenderit sed necessitatibus sunt. Dignissimos provident aliquid necessitatibus nostrum accusantium autem fugiat esse et eum. Consectetur.</p>
+            </div>
+        </div>
+        
+    </main>
+
+
+    <script src="./js/jquery.min.js"></script>
+    <script>
+        $('#menuToggle').on('click', function(e){
+            $('#ham_menu').toggleClass('open');
+        })
+    </script>
+</body>
+</html>

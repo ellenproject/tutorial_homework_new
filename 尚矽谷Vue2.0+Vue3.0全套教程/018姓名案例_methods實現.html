@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>018姓名案例_methods語法實現</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        姓：<input type="text" v-model="firstName"> <br/><br/>
+        名：<input type="text" v-model="lastName"> <br/><br/>
+        全名：<span>{{fullName()}}</span>
+        <!-- 在事件上，比如@click="fullName"或@click="fullName()"，加不加小括號都行；但在插值語法上，{{}}，一定要加小括號 -->
+    </div>
+
+
+    <script>
+        Vue.config.productionTip = false
+ 
+        new Vue({
+            el: '#root',
+            data:{
+                firstName: '張',
+                lastName:'三'
+            },
+            methods:{
+                fullName(){
+                    return this.firstName + '-' + this.lastName
+                    //只要data中的數據發生改變，那麼Vue一定會重新解析模板，
+                    //頁面上的firstName變成張123，遇到插值語法裡面寫的方法，這個方法一定重新再幫你調一遍
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>測試篩選filter</title>
+    <style>
+        body{
+            line-height: 1.5;
+            font-family: sans-serif;
+        }
+        *{
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .row{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        img{
+            max-width: 100%;
+            vertical-align: middle;
+        }
+        .gallery{
+            width: 100%;
+            display: block;
+            min-height: 100vh;
+            background-color: #2a2932;
+            padding: 100px 0;
+        }
+        .container{
+            max-width: 1170px;
+            margin: auto;
+        }
+        .gallery .gallery-filter{
+            padding: 0 15px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .gallery .gallery-filter .filter-item{
+            color: #fff;
+            font-size: 17px;
+            border: 2px solid #fff;
+            text-transform: uppercase;
+            display: inline-block;
+            border-radius: 20px;
+            margin-right: 8px;
+            cursor: pointer;
+            padding: 8px 20px 8px 20px;
+            line-height: 1.2;
+            transition: all .3s ease;
+        }
+        .gallery .gallery-filter .filter-item.active{
+            color: #fff;
+            background-color: #16b5ef;
+            border-color: #16b5ef;
+        }
+        .gallery .gallery-item{
+            width: calc(100% / 3);
+            padding: 15px;
+        }
+        .gallery .gallery-item-inner img{
+            width: 100%;
+            border: 3px solid #d4dad9;
+        }
+        .gallery .gallery-item.show{
+            animation: fadeIn .5s ease;
+        }
+        .gallery .gallery-item.hide{
+            display: none;
+        }
+        @keyframes fadeIn{
+            0%{
+                opacity: 0;
+            }
+            100%{
+                opacity: 1;
+            }
+        }
+        @media (max-width: 491px) {
+            .gallery .gallery-item{
+                width: 50%;
+            }
+        }
+        @media (max-width: 667px) {
+            .gallery .gallery-item{
+                width: 100%;
+            }
+            .gallery .gallery-filter .filter-item{
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="gallery">
+        <div class="container">
+            <div class="row">
+                <div class="gallery-filter">
+                    <span class="filter-item active" data-filter="all">所有</span>
+                    <span class="filter-item" data-filter="tool">工具</span>
+                    <span class="filter-item" data-filter="game">遊戲</span>
+                    <span class="filter-item" data-filter="3d">3D風格遊戲</span>
+                    <span class="filter-item" data-filter="cellphone">手機端遊戲</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="gallery-item game">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/01.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item game">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/02.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item 3d">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/03.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item 3d">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/04.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item cellphone">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/05.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item cellphone">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/06.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item game 3d">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/07.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item 3d tool">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/08.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item tool cellphone">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/09.jpg" alt=""></a></div>
+                </div>
+                <div class="gallery-item game tool cellphone">
+                    <div class="gallery-item-inner"><a href=""><img src="./img/10.jpg" alt=""></a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script>
+        $(function(){
+            const filterContainer = document.querySelector(".gallery-filter");
+            const galleryItems = document.querySelectorAll(".gallery-item");
+
+            filterContainer.addEventListener("click", (event) =>{
+                if (event.target.classList.contains("filter-item")){
+                    //停用現有的active 'filter-item'
+                    filterContainer.querySelector(".active").classList.remove("active");
+                    
+                    //啟用新的'filter-item'
+                    event.target.classList.add("active");
+
+                    const filterValue = event.target.getAttribute("data-filter");
+
+                    galleryItems.forEach((item) => {
+                        if(item.classList.contains(filterValue) || filterValue === 'all'){
+                            item.classList.remove("hide");
+                            item.classList.add("show");
+                        }
+                        else{
+                            item.classList.remove("show");
+                            item.classList.add("hide");
+                        }
+                    });
+                }
+            });
+
+        })
+    </script>
+
+
+</body>
+</html>

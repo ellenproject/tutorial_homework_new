@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>038收集表單數據</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        收集表單數據：
+        若：<input type="text"/>，則v-model收集的是value值，用戶輸入的就是value值。
+        若：<input type="radio"/>，則v-model收集的是value值，且要給標籤配置value值。
+        若：<input type="checkbox"/>
+            1.沒有配置input的value屬性，那麼收集的就是checked﹙勾選or未勾選，是布爾值﹚
+                ex.userInfo.sex
+            2.配置input的value屬性：
+                (1).v-model的初始值是非數組，那麼收集的就是checked﹙勾選or未勾選，是布爾值﹚
+                    ex.userInfo.hobby
+                (2).v-model的初始值是數組，那麼收集的就是value組成的數組
+                    ex.userInfo.hobby
+            備註：v-model的三個修飾符：
+                lazy：失去焦點再收集數據 
+                    ex.userInfo.other，全部打完後按tab，失去焦點，就不會每打什麼就出現什麼，而是打完之後一次出現
+                number：輸入字符串轉為有效的數字 
+                    ex.userInfo.age，年齡之類一定要是數字，type是text就還是會出現字符串；type是number才會都是數字
+                trim：輸入首尾空格過濾 
+                    ex.userInfo.account，即使用戶輸入空格，也不會輸入到數據中
+     -->
+
+
+
+    <div id="root">
+        <form @submit.prevent="demo">
+            <!-- <label for="demo">帳號：<input type="text" id="demo"></label> -->
+            帳號：<input type="text" v-model.trim="userInfo.account"> <br/><br/>
+            密碼：<input type="password" v-model="userInfo.password"> <br/><br/>
+            年齡：<input type="number" v-model.number="userInfo.age"> <br/><br/>
+            <!-- v-model可以收集到value值，具體來說就是框裡輸入什麼就是value值 -->
+            <!-- type是text的話，打什麼就顯示什麼，但像年齡一定是數字，就可以用type=number控制 -->
+            性別：
+            男<input type="radio" name="sex" v-model="userInfo.sex" value="male">
+            女<input type="radio" name="sex" v-model="userInfo.sex" value="female"> <br/><br/>
+            <!-- input沒辦法輸入東西，只能選擇勾或不勾，所以沒辦法收集到value值、無論選擇什麼都只會出現null -->
+            愛好：
+            學習<input type="checkbox" v-model="userInfo.hobby" value="study">
+            打遊戲<input type="checkbox" v-model="userInfo.hobby" value="game">
+            吃飯<input type="checkbox" v-model="userInfo.hobby" value="eat"> <br/><br/>
+            <!-- checkbox也是不能往裡面輸入文字變成value值的，所以也要像radio一樣配置value值 -->
+            <!-- 如果不配置value值，v-model默認讀取到的就是標籤的checked -->
+            <!-- 當一個checkbox變成true，那其他的checkbox也會因為true狀態而勾選 -->
+            <!-- hobby的初始值﹙指''或[]﹚能夠影響v-model收集回來的數據
+                ﹙如果是字符串''，只會看勾不勾；如果是數組[]，可以看value值﹚ -->
+            所屬校區
+            <select v-model="userInfo.city">
+                <option value="">請選擇校區</option>
+                <option value="Taipei">台北</option>
+                <option value="Taichung">台中</option>
+                <option value="Tainan">台南</option>
+            </select> <br/><br/>
+            其他信息：
+            <textarea v-model.lazy ="userInfo.other"></textarea> <br/><br/>
+            <input type="checkbox" v-model="userInfo.agree">閱讀並接受<a href="https://www.google.com">《用戶協議》</a> <br/><br/>
+            <button>提交</button>
+        </form>
+    </div>
+
+    <script>
+        Vue.config.productionTip = false
+
+        new Vue({
+            el:'#root',
+            data:{
+                userInfo:{
+                    account: '',
+                    password:'',
+                    age:'',
+                    sex:'female',
+                    hobby:[],
+                    city:'Taipei',
+                    other:'',
+                    agree:'',
+                }
+            },
+            methods:{
+                demo(){
+                    // console.log(JSON.stringify(this._data));
+                    console.log(JSON.stringify(this.userInfo));
+                }
+            }
+        })
+    </script>
+</body>
+</html>

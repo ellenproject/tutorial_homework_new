@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>032列表排序</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h2>人員列表</h2>
+        <input type="text" placeholder="請輸入名字" v-model="keyWord">
+        <button @click="sortType = 2">年齡升序</button>
+        <button @click="sortType = 1">年齡降序</button>
+        <button @click="sortType = 0">原順序</button>
+        <ul>
+            <li v-for="(p, index) in filPersons" :key="p.id">
+                {{p.name}}  ----  {{p.age}}  ---- {{p.sex}}
+                <input type="text">
+            </li>
+        </ul>
+    </div>    
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        new Vue({
+            el:'#root',
+            data:{
+                keyWord:'',
+                sortType: 0, //0原順序 1降序 2升序
+                persons:[
+                    {id:'001', name: '馬冬梅', age: 30, sex: '女'},
+                    {id:'002', name: '周冬雨', age: 31, sex: '女'},
+                    {id:'003', name: '周杰倫', age: 18, sex: '男'},
+                    {id:'004', name: '溫兆倫', age: 19, sex: '男'}
+                ],
+            },
+            computed:{
+                //過濾跟排序是不分家的，意味著，過濾的邏輯已經寫完了，在過濾的邏輯之上，再加一個排序就行了
+                //filPersons是列表<li v-for="(p, index) in filPersons">中正在用的，也就是說列表之所以能出來，離不開filPersons
+                //filPersons過濾完了，列表也就過濾完了。因為列表<li>是依賴filPersons出來的，把filPersons維護好，列表就維護好了。
+                //一句話：想過濾嗎？把filPersons過濾好，想排序嗎？把filPersons裡的數組順序整理好
+                //this.persons.filter不能急著return，
+                //現在return this.persons.filter(){}這麼寫的意思是：代表二話不說就返回了this.persons.filter((p)=>{return p.name.indexOf(this.keyWord) !== -1})的結果，
+                //而這個結果直接就作為filPersons的值了。請問有機會去排序嗎？沒有。所以說，確實得過濾this.persons.filter(){}，但別急著把這個結果返回return
+                //先用一個變量arr來接住數組的結果
+
+                filPersons(){
+                    const arr = this.persons.filter((p)=>{
+                        return p.name.indexOf(this.keyWord) !== -1
+                    })
+                    //判斷一下是否需要排序
+                    if(this.sortType){
+                        arr.sort((p1,p2)=>{
+                            return this.sortType === 1 ? p2.age-p1.age : p1.age-p2.age
+                        })
+                    }
+                    return arr
+                }
+            }
+        })
+    </script>
+</body>
+</html>

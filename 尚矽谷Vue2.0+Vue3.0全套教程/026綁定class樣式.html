@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>026綁定class樣式</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <style>
+        .basic{
+            width: 400px;
+            height: 100px;
+            border: 1px solid black;
+        }
+        .normal{
+            background-color: skyblue;
+        }
+        .happy{
+            background-color: coral;
+        }
+        .sad{
+            background-color: gray;
+        }
+        .color1{
+            color: violet;
+        }
+        .color2{
+            font-size: 45px;
+        }
+        .color3{
+            text-shadow: 1px 5px 15px royalblue;
+            border-radius: 25px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 
+        綁定樣式：
+        1. class樣式
+            寫法：class="xxx"，xxx可以是字符串、對象、數組。
+            字符串寫法適用於：類名不確定，要動態獲取。
+            對象寫法適用於：要綁定多個樣式，個數不確定，名字也不確定。
+            數組寫法適用於：要綁定多個樣式，個數確定，名字也確定，但不確定用不用。
+        2. style樣式
+            :style="{fontSize: xxx}"其中xxx是動態值。
+            :style="[a,b]"其中a、b是樣式對象。樣式對象指的是backgroundColor、color、fontSize等等這些已有固定寫法、不能自己亂定義的樣式名稱。
+     -->
+
+
+    <div id="root">
+        <!-- 綁定class樣式：字符串寫法，適用於：樣式的類名不確定，需要動能指定 -->
+        <div class="basic" :class="mood" @click="changeMood">{{name}}</div> <br/><br/>
+
+        <!-- 綁定class樣式：數組寫法，適用於：要綁定的樣式個數不確定、名字也不確定。 下面也可以，但通常寫成上面更方便快速 -->
+        <div class="basic" :class="classArr">{{name}}</div> <br/><br/>
+        <div class="basic" :class="[a,b,c]">{{name}}</div> <br/><br/>
+
+        <!-- 綁定class樣式：對象寫法，適用於：要綁定的樣式個數確定，名字也確定，但要動態決定用不用 -->
+        <div class="basic" :class="classObj">{{name}}</div> <br/><br/>
+
+        <!-- 綁定style樣式：對象寫法。知道即可，不太會用到 -->
+        <div class="basic" :style="styleObj">{{name}}</div> <br/><br/>
+        <div class="basic" :style="[styleObj, styleObj2]">{{name}}</div>
+
+        <!-- 綁定style樣式：數組寫法。知道即可，不太會用到 -->
+        <div class="basic" :style="styleArr">{{name}}</div>
+    </div>
+    
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        const vm = new Vue({
+            el: '#root',
+            data:{
+                name:'Jake',
+                mood: 'normal',
+                classArr:['color1', 'color2', 'color3'],
+                a: 'color1',
+                b: 'color2',
+                c: 'color3',
+                classObj:{
+                    color1: false,
+                    color2: false,
+                },
+                styleObj:{
+                    fontSize: '40px',
+                    color: 'red',
+                },
+                styleObj2:{
+                    backgroundColor: 'orange',
+                },
+                styleArr:[
+                    {
+                        fontSize: '40px',
+                        color: 'blue',
+                    },
+                    {
+                        backgroundColor: 'gray',
+                    },
+                ]
+            },
+            methods:{
+                changeMood(){
+                    const arr = ['happy','sad','normal']
+                    const index = Math.floor(Math.random()*3)
+                    this.mood = arr[index]
+                }
+            }
+        })
+    </script>
+</body>
+</html>

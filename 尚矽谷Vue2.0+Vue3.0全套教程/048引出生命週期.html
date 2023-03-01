@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>048引出生命週期</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        生命周期：
+            1.又名：生命周期回調函數、生命周期函數、生命周期鉤子
+                mounted()是回調函數，因為是我們定義的mounted，內容我們寫的。我們有沒有調用？沒有。那mounted有沒有執行，有。
+            2.是什麼：Vue在關鍵時刻幫我們調用的一些特殊名稱的函數
+            3.生命周期函數的名字不可更改，但函數的具體內容是程序員根據需求編寫的
+            4.生命周期函數中的this指向是vm 或 組件實例對象。
+    -->
+    <!-- 
+        人的一生﹙人的生命周期﹚：
+            呱呱墮地了
+            學會說話了
+            學會走路了
+        vm的一生﹙vm的生命周期﹚：
+            aaaa了  ===> 調用aaaa函數
+            掛載完畢了  ===> 調用mounted函數
+            bbbb了  ===> 調用bbbb函數
+        vm在掛載完畢之前，還調用了別的函數，在掛載完畢之後，還調用了別的函數
+        人的一生就是關鍵的時間點做關鍵的事，vm的一生就是關鍵的時間點調關鍵的函數，這一堆函數﹙從aaaa到mounted到bbbb﹚就統稱為生命周期
+        什麼叫生命周期？生命周期本質就是函數等著Vue幫你調
+        官網那張長表上，紅框的函數就是生命周期，綠底的就是環節，黃底的是判斷
+    -->
+    <div id="root">
+        <!-- {opacity: opacity} 前者指屬性，後者指數據名-->
+        <!-- 剛好兩個重名，重名就簡寫成{opacity}就好，因為:style=接JS表達式，JS表達式可以用簡寫來寫對象 -->
+        <h2 :style="{opacity}">歡迎學習Vue</h2>
+        
+    </div>
+
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        new Vue({
+            el:'#root',
+            data:{
+                opacity: 1,
+            },
+            methods: {
+                
+            },
+            //Vue完成模板的解析並把初始的真實DOM元素放入頁面後﹙掛載完畢﹚調用mounted
+            mounted(){
+                console.log('mounted',this);
+                setInterval(() => {
+                    this.opacity -= 0.01
+                    if(this.opacity <= 0) this.opacity = 1
+                }, 16);
+            },
+        })
+
+        
+        //通過外部的定時器實現﹙不推薦﹚
+        /*
+        setInterval(() => {
+            vm.opacity -= 0.01
+            //如果一直-0.01就會變透明，為了讓它變成1，要寫if
+            //if透明度等於0，就變回1
+            //但JS對小數點不擅長，0.1+0.2它不會算出0.3，所以不能寫opacity===0，要寫opacity<=0
+            if(vm.opacity <= 0) vm.opacity = 1
+        }, 16);
+        */
+    </script>
+</body>
+</html>

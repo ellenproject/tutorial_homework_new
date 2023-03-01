@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>012理解數據代理</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 數據代理：通過一個對象代理，對另一個對象中屬性的操作(讀/寫) -->
+
+    <script>
+        Vue.config.productionTip = false  //阻止Vue在啟動時生成生產提示
+
+        let obj = {x: 100}
+        let obj2 = {y:200}
+
+        //想通過obj2去讀到obj的x，而且還能修改，這就是數據代理
+        Object.defineProperty(obj2, 'x', {
+            get(){
+                return obj.x
+            },
+            set(value){
+                obj.x = value
+            }
+        })
+    </script>
+</body>
+</html>

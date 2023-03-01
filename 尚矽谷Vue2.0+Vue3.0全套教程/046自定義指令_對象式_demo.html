@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>046自定義指令_對象式_demo</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <style>
+        .demo{
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn">點我創建一個輸入框</button>
+
+    <script>
+        const btn = document.getElementById('btn')
+        btn.onclick = () =>{
+            const input = document.createElement('input')
+            input.className = 'demo'
+            input.onclick = ()=>{alert(1)}
+
+            input.value = 99
+            document.body.appendChild(input)
+            //input這個元素，只有放在頁面上了，用戶才有資格談你點擊/操作/獲取焦點他，
+            //所以重點是先要放在頁面上，才去操作，但也不一定，比如className、value
+            //要先放在頁面上，才知道input的父元素是誰；如果在還沒放入頁面，就找input的父元素，連input都不知道在哪，怎麼找他的父元素
+            //所以不是代碼錯了，而是執行的時機有問題：要先知道什麼時候有input這個元素
+            input.focus() 
+            input.parentElement.style.backgroundColor = 'skyblue'
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gsap scrollTrigger</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        .nav{
+            position: fixed;
+            width: 100%;
+            z-index: 999;
+        }
+        .nav-wrapper{
+            padding: 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .fa-bars{
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 50%;
+        }
+        .logo{
+            padding: 10px;
+            background-color: #fff;
+        }
+        .header{
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .header h1{
+            color: #fff;
+            z-index: 9;
+            font-size: 38px;
+        }
+        .scroll{
+            display: flex;
+            margin-top: 50px;
+            color: #fff;
+        }
+        section{
+            height: 100vh;
+            max-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+        .header-reveal{
+            background-color: red;
+            min-width: 100%;
+            height: 100%;
+            position: absolute;
+            background: url(https://images.unsplash.com/photo-1614247262098-76459e80e152?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1539&q=80);
+            transform: scale(0.75);
+        }
+        .art-wrapoper{
+            padding: 20px 0;
+            margin: 200px 0;
+        }
+        .art-wrapper::before{
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 60%;
+            background-color: #fff;
+            border: 1px solid #eee;
+        }
+        .container{
+            max-width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="nav-wrapper">
+            <div class="logo">Museum of Classical art</div>
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+    <section class="header">
+        <div class="header-reveal"></div>
+        <h1>Classical art</h1>
+        <div class="scroll">scroll down</div>
+    </section>
+    <section id="art" class="art-wrapper">
+        <div class="container">
+            <div class="collumn">
+                <img class="left-img" src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=704&q=80" alt="">
+            </div>
+            <div class="collumn">
+                <img class="mid-img" src="https://images.unsplash.com/photo-1579783901586-d88db74b4fe4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80" alt="">
+            </div>
+            <div class="collumn">
+                <img class="right-img" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=983&q=80" alt="">
+            </div>
+        </div>
+        <div class="titel">
+            Still lives
+            <span>view more <i class="fas fa-chevron-right"></i> </span>
+        </div>
+    </section>
+    <section id="art" class="art-wrapper">
+        <div class="container">
+            <div class="collumn">
+                <img class="left-img" src="https://images.unsplash.com/photo-1574184180347-527304c53004?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=989&q=80" alt="">
+            </div>
+            <div class="collumn">
+                <img class="mid-img" src="https://images.unsplash.com/photo-1583934555852-537536e49071?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1015&q=80" alt="">
+            </div>
+            <div class="collumn">
+                <img class="right-img" src="https://images.unsplash.com/photo-1576503918400-0b982e6a98bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1007&q=80" alt="">
+            </div>
+        </div>
+        <div class="titel">
+            portraits
+            <span>view more <i class="fas fa-chevron-right"></i> </span>
+        </div>
+    </section>
+    <section class="artist">
+        <span class="left-scroll">
+            <ul>
+                <li>Leonardo da Vinci</li>
+                <li>Vincent van Gogh</li>
+                <li>Rembrandt van Rijn</li>
+                <li>Pablo Picasso</li>
+                <li>Claude Monet</li>
+                <li>Johannes Vermeer</li>
+                <li>Salvador Dal&iacute;</li>
+                <li>Peter Paul Rubens</li>
+                <li>Michelangelo</li>
+            </ul>
+        </span>
+        <span class="right-scroll">
+            <ul>
+                <li>Leonardo da Vinci</li>
+                <li>Vincent van Gogh</li>
+                <li>Rembrandt van Rijn</li>
+                <li>Pablo Picasso</li>
+                <li>Claude Monet</li>
+                <li>Johannes Vermeer</li>
+                <li>Salvador Dal&iacute;</li>
+                <li>Peter Paul Rubens</li>
+                <li>Michelangelo</li>
+            </ul>
+        </span>
+        <span class="left-scroll">
+            <ul>
+                <li>Leonardo da Vinci</li>
+                <li>Vincent van Gogh</li>
+                <li>Rembrandt van Rijn</li>
+                <li>Pablo Picasso</li>
+                <li>Claude Monet</li>
+                <li>Johannes Vermeer</li>
+                <li>Salvador Dal&iacute;</li>
+                <li>Peter Paul Rubens</li>
+                <li>Michelangelo</li>
+            </ul>
+        </span>
+    </section>
+    <section class="footer"></section>
+</body>
+</html>

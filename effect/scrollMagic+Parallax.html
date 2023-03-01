@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollMagic+GSAP+Parallax</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            /* overflow-x: hidden; */
+        }
+        header{
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+        }
+        .nav{
+            position: sticky;
+            background-color: transparent;
+            color: #fff;
+            padding: 30px 50px;
+            top: 0;
+            z-index: 100;
+        }
+        .nav__inner{
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav__inner-text{
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .nav.enter .nav__inner-text{
+            opacity: 1;
+        }
+        .nav__inner .progress-lines{
+            position: relative;
+        }
+        .nav__inner .progress-lines .line{
+            height: 3px;
+            width: 28px;
+            margin-right: 3px;
+            background-color: #fff;
+            position: absolute;
+            top: 10px;
+            right: -5px;
+            transform: rotate(-45deg) translateX(-15%);
+            opacity: 0;
+        }
+        .nav.enter .nav__inner .line{
+            transform: rotate(-45deg) translateX(0);
+            opacity: 1;
+        }
+        .nav__inner .progress-lines .line--1{
+            right: 25px;
+            transition: background-color 0.5s ease, opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s;
+        }
+        .nav__inner .progress-lines .line--2{
+            right: 10px;
+            transition: background-color 0.5s ease, opacity 0.5s ease 0.75s, transform 0.5s ease 0.75s;
+        }
+        .nav__inner .progress-lines .line--3{
+            right: -5px;
+            transition: background-color 0.5s ease, opacity 0.5s ease 0.9s, transform 0.5s ease 0.9s;
+        }
+        .nav.nav--section-1 .line--1{
+            background-color: #fa4616;
+        }
+        .nav.nav--section-2 .line--2{
+            background-color: #fa4616;
+        }
+        .nav.nav--section-3 .line--3{
+            background-color: #fa4616;
+        }
+        .nav-border{
+            position: absolute;
+            height: 1px;
+            background-color: grey;
+            width: calc(100% - 100px);
+            transform: scaleX(0);
+            opacity: 0;
+            transform-origin: left;
+            transition: transform 1s ease-in-out, opacity 0.6s ease;
+        }
+        .nav.enter .nav-border{
+            opacity: 1;
+            transform: scaleX(1);
+            transition-delay: 0.15s;
+        }
+        .section{
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        .section__content{
+            position: relative;
+            width: 100vw;
+            height: 200%;
+            top: -100%;
+        }
+        .section__content-subheading{
+            position: absolute;
+            top: 100vh;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            font-weight: 100;
+            color: #fa4616;
+        }
+        .section__content .col-1, .section__content .col-2{
+            opacity: 0;
+            background-color: #fff;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 150vh;
+            left: 5%;
+            transform: translateY(-50%);
+        }
+        .section__content .col-2{
+            background-color: transparent;
+            width: 30%;
+            top: 160vh;
+            height: auto;
+            right: 5%;
+            left: unset;
+        }
+        .section__content .col-2 p{
+            color: #fff;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Scroll Animation</h1>
+    </header>
+    <div class="nav">
+        <div class="nav__inner">
+            <span class="nav__inner-text">Now you can</span>
+            <div class="progress-lines">
+                <span class="line line--1"></span>
+                <span class="line line--2"></span>
+                <span class="line line--3"></span>
+            </div>
+        </div>
+        <span class="nav-border"></span>    
+    </div>
+    <section class="section" id="section-1">
+        <div class="section__content">
+            <div class="section__content-subheading">
+                <h2>SPEED</h2>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2">
+                <p>Get to market sooner with fast and cost-effective delivery. No need to manage fit outs with custom-built rack-ready spaces.</p>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="section-2">
+        <div class="section__content">
+            <div class="section__content-subheading">
+                <h2>SCALE</h2>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2">
+                <p>Optimise your capacity on campuses you can grow into. Secure tomorrow's needs today. No more surprises.</p>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="section-3">
+        <div class="section__content">
+            <div class="section__content-subheading">
+                <h2>SOLVE</h2>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2">
+                <p>Develop expert solutions with partners, not salespeople. Lead the market. Finally, you're on the front foot.</p>
+            </div>
+        </div>
+    </section>
+    
+    
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/animation.gsap.min.js"></script>
+    <script>
+        //創建一個控制器
+        const controller = new ScrollMagic.Controller();
+        const nav = document.querySelector('.nav');
+        const section = document.querySelectorAll('.section');
+        let sceneHeight = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            sceneHeight = window.innerHeight;
+        })
+
+        //循環遍歷區塊方法
+        section.forEach((sect, index) => {
+            headingParallaxTween(index, controller);
+            contentFadeInTween(index, controller);
+            contentParallaxOutTween(index, controller);
+        });
+
+        function headingParallaxTween(i, controller) {
+            const sectionIndex = `section-${i + 1}`
+            const headingTween = new gsap.timeline();
+            headingTween.to(`#${sectionIndex} .section__content-subheading`, 1, { y: '30vh', ease:Linear.easeNone }, 0);
+            
+            const sceneHeading = new ScrollMagic.Scene({
+                triggerElement: `#${sectionIndex}`,
+                duration: sceneHeight,
+                triggerHook: 1,
+            })
+            .setTween(headingTween)
+            .addIndicators()
+            .addTo(controller);
+        }
+
+        function contentFadeInTween(i, controller) {
+            const sectionIndex = `section-${i + 1}`
+            const contentTween = new gsap.timeline();
+            contentTween.to(`#${sectionIndex} .col-1`, 1, { autoAlpha: 1, x: 300, ease:Linear.easeNone }, 0)
+                .to(`#${sectionIndex} .col-2`, 1, { autoAlpha: 1, x: -300, ease:Linear.easeNone }, 0)
+            
+            const sceneContent = new ScrollMagic.Scene({
+                triggerElement: `#${sectionIndex}`,
+                duration: sceneHeight,
+                triggerHook: 0,
+            })
+            .setTween(contentTween)
+            .setPin(`#${sectionIndex}`)
+            .on('enter', (event) => {
+                if (i === 0) nav.classList.add('enter');
+                nav.classList.add(`nav--${sectionIndex}`);
+            })
+            .on('leave', (event) => {
+                if (event.scrollDirection === 'REVERSE') {
+                if (i === 0) nav.classList.remove('enter');
+                nav.classList.remove(`nav--${sectionIndex}`);
+                }
+            })
+            .addIndicators()
+            .addTo(controller);
+        }
+
+        function contentParallaxOutTween(i, controller) {
+        if (i === 0) return;
+        const sectionIndex = `section-${i + 1}`
+        const fadeUp = new gsap.timeline();
+
+        fadeUp.to(`#section-${i} .section__content-subheading`, 1, { y: '-300', ease:Linear.easeNone }, 0)
+            .to(`#section-${i} .col-1`, 1, { y: '-250', ease:Linear.easeNone }, 0)
+            .to(`#section-${i} .col-2`, 1, { y: '-100', ease:Linear.easeNone }, 0);
+
+        const fadeUpScene = new ScrollMagic.Scene({
+            triggerElement: `#${sectionIndex}`,
+            duration: sceneHeight,
+            triggerHook: 1,
+        })
+        .setTween(fadeUp)
+        .addIndicators()
+        .addTo(controller);
+        }
+
+
+
+    </script>
+</body>
+</html>

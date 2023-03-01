@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>this呼叫者</title>
+</head>
+<body>
+    <h1>Learning Javascript</h1>
+
+    <script type="text/javascript">
+        function printOut(){
+            console.log(this);  //this指向的是window
+        }
+        printOut();
+
+        const myTitle = document.getElementsByTagName('h1')[0];
+        
+        myTitle.addEventListener("click", function(){
+            console.log(this);  //this指向的是元素：myTitle
+        })
+
+        myTitle.addEventListener("click", printOut);  //this指向的是元素：myTitle
+
+        myTitle.addEventListener("click", printOut.bind({
+            radius : 10,
+            color: "gold",
+        }));  //this指向的是bind後面定義的新的object對象。結論：bind可以改變this指向的對象。
+
+
+        //bind的作用是把一個object對象綁定到對應的function裡面
+
+        class Circle{
+            constructor(_radius = 5, _color = "red"){
+                this.radius = _radius;
+                this.color = _color;
+            }
+
+
+            printFunc(){
+                setTimeout(function(){
+                    console.log(this);
+                    console.log(this.radius);
+                }, 100);
+            }
+
+            printArrowFunc(){
+                setTimeout(()=>{
+                    console.log(this);
+                    console.log(this.radius);
+                }, 100)
+            }
+        }
+
+        let circle_3 = new Circle(8,"blue");
+        let circle_4 = new Circle(6, "orange");
+
+        circle_3.printFunc();  //跟printFunc()輸出的結果一樣，this指向的都是global window object全局window對象
+        circle_4.printArrowFunc();  //用箭頭函數指向的，則是當前的class Circle
+        //用箭頭函數的好處：同樣都是this.radius，輸出的結果：
+        //普通函數指向window、沒有radius屬性，箭頭函數指向class Circle、可以直接拿到radius屬性
+
+
+
+    </script>
+</body>
+</html>

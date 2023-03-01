@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>049生命周期_掛載流程</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        new Vue() 
+        
+        Init Events&Lifecycle 
+        初始化：生命周期、事件，但數據代理還未開始。//環節執行之後，馬上幫你調函數beforeCreate
+        
+        beforeCreate 
+        此時：無法通過vm訪問到data中的數據、methods的方法。//第一個生命周期函數
+        
+        Init injections & reactiveity 
+        初始化：數據監測、數據代理。
+        
+        created 
+        此時：可以通過vm訪問到data中的數據、methods中配置的方法。
+        
+        Has 'el' option? 
+        有沒有el的配置項？有，el:'#root'                  ┌
+                                                        ├
+        Has 'template' option?                          ├
+        有沒有template選項？沒有                          ├ 此階段Vue開始解析模板，生成虛擬DOM﹙內存中﹚，頁面還不能顯示解析好的內容。
+                                                        ├
+        Compile el's outerHTML as template              ├
+        編譯el的外部HTML作為模板                          └
+        
+        beforeMount 
+        掛載之前。
+        此時：
+        1.頁面所呈現的是未經Vue編譯的DOM結構。
+        2.所有對DOM的操作，最終都不奏效。
+
+        create vm $el and replace "el" with it 
+        將內存中的 虛擬DOM 轉為 真實DOM 插入頁面 
+        //用vm身上的$el，替換掉整個el的東西﹙即容器裡的東西﹚
+        //vue把虛擬DOM轉為真實DOM之後，偷偷在vm $el存一份
+
+        mounted 
+        此時：
+        1.頁面中呈現的是經過Vue編譯的DOM。
+        2.對DOM的操作均有效﹙盡可能避免﹚。
+        至此初始化過程結束，一般在此進行：開啟定時器、發送網路請求、訂閱消息、綁定自定義事件、等初始化操作。
+
+        //以上是掛載流程，接下來是更新流程
+
+        beforeUpdate
+        此時：數據是新的，但頁面是舊的，即：頁面尚未和數據保持同步。
+        在哪個生命周期中，頁面和數據尚未保持同步？就是beforeUpdate
+
+        Virtual DOM re-render and patch
+        根據新數據，生成新的虛擬DOM，隨後與舊的虛擬DOM進行比較，最終完成頁面更新，即：完成了Model => View的更新
+        虛擬DOM重新渲染，新的虛疑DOM和舊的虛擬DOM進行比較
+        在掛載的時候其實就走一次了，但那次是初次渲染，這次是更新
+
+        updated
+        此時：數據是新的，頁面也是新的，即：頁面和數據保持同步。
+
+        //銷毀流程
+        when vm.$destroy() is called
+        當vm身上的destroy方法被調用的時候，就開始走銷毀流程
+        簡單說，當我頁面不需要vm，或是頁面不需要維護了，不需要一改數據就改頁面了，就銷毀掉
+
+        beforeDestroy
+        此時，vm中所有的：data、methods、指令等等，都處於可用狀態，馬上要執行銷毀過程，一般在此階段：關閉定時器、取消訂閱消息、解綁自定義事件等收尾操作
+        在destroy之前，指還沒銷毀呢，但馬上要執行銷毀。
+
+        Teardown watchers, child components and event listeners
+        移除所有監視，子組件跟事件監聽器。
+        想像一下vm下面有三四個兄弟，vm都不在了，自然下面那幾個兄弟也都消失了
+    -->
+    <!-- 
+        張三的一生﹙張三的生命周期﹚：
+                        將要出生
+                ﹙重要﹚呱呱墜地 ===> 檢查身體各項指標。
+                        學會說話
+                        學會走路
+                        …………………
+                        …………………
+                ﹙重要﹚將要永別 ===> 交代後事
+                        已經永別 
+        vm的一生﹙vm的生命周期﹚：
+                        將要創建 ===> 調用beforeCreate函數。
+                        創建完畢 ===> 調用created函數。
+                        將要掛載 ===> 調用beforeMount函數。
+                ﹙重要﹚掛載完畢 ===> 調用mounted函數。 ============>【重要的鉤子】//初始化的事在這裡做
+                        將要更新 ===> 調用beforeUpdate函數。
+                        更新完畢 ===> 調用updated函數。
+                ﹙重要﹚將要銷毀 ===> 調用beforeDestroy函數。 ============>【重要的鉤子】//收尾的事在這裡做
+                        銷毀完畢 ===> 調用destroyed函數。
+    -->
+    <!-- 
+        生命週期目前講了8個=>4對。
+    -->
+    <div id="root">
+        <h2 v-text="n"></h2>
+        <!-- vm.$destroy()完全銷毀一個實例。清理它與其它實例的連接，解綁它的全部指令及事件監聽器。注意：此處事件指自定義事件，而不是原生的DOM事件 -->
+        <!-- 自定義指@click，給button綁定一個click事件，Vue也得用正常的DOM事件給button進行綁定，一旦綁定以後就撤不下去了。vm被你銷毀一萬次，@click也在，因為它屬於原生DOM事件 -->
+        <!-- 那解綁事件監聽器指的是解綁自定義事件，意即，vm.$destroy()之後，自定義事件都被銷毀了不在了 -->
+        <h2>當前的n值是：{{n}}</h2>
+        <button @click="add">點我n+1</button>
+        <button @click="bye">點我銷毀vm</button>
+    </div>
+
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        new Vue({
+            el:'#root',
+            /*
+            template:`
+            <div>
+                <h2>當前的n值是：{{n}}</h2>
+                <button @click="add">點我n+1</button>
+            </div>
+            `,
+            */
+            data:{
+                n:1,
+            },
+            methods: {
+                add(){
+                    console.log('add');
+                    this.n++
+                },
+                bye(){
+                    console.log('bye');
+                    this.$destroy()
+                }
+            },
+            watch:{
+                n(){
+                    console.log('n變了');
+                }
+            },
+            beforeCreate() {
+                console.log('beforeCreate');
+            },
+            created(){
+                console.log('created');
+            },
+            beforeMount(){
+                console.log('beforeMount');
+            },
+            mounted(){
+                console.log('mounted');
+            }, 
+            beforeUpdate() {
+                console.log('beforeUpdate');
+            },
+            updated(){
+                console.log('updated');
+            },
+            beforeDestroy(){
+                console.log('beforeDestroy');
+                this.add()
+            },
+            destroyed(){
+                console.log('destroyed');
+            }
+        })
+
+    </script>
+</body>
+</html>

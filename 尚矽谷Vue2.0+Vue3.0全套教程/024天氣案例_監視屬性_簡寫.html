@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>024監視的簡寫形式</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h2>今天天氣很{{info}}</h2>
+        <button @click="changeWeather">切換天氣</button>
+    </div>
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        const vm = new Vue({
+            el: '#root',
+            data:{
+                isHot: true,
+            },
+            computed:{
+                info(){
+                    return this.isHot ? '炎熱' : '涼爽'
+                }
+            },
+            methods: {
+                changeWeather(){
+                    this.isHot = !this.isHot
+                }
+            },
+            watch:{
+                //正常寫法
+                /*
+                isHot:{
+                    // immediate: true, //初始化時讓handler調用一下
+                    // deep: true,  //深度監視
+                    handler(newValue, oldValue){
+                        console.log('isHot被修改了',newValue, oldValue);
+                    }
+                },
+                */
+               //簡寫
+               /*
+               isHot(newValue, oldValue){
+                    console.log('isHot被修改了',newValue, oldValue);
+               }
+               */
+            }
+        })
+
+        //正常寫法
+        /*
+        vm.$watch('isHot',{
+            immediate: true, //初始化時讓handler調用一下
+            deep: true,  //深度監視
+            handler(newValue, oldValue){
+                console.log('isHot被修改了',newValue, oldValue);
+            }
+        })
+        */
+
+        //簡寫
+        vm.$watch('isHot',function(newValue, oldValue){
+            console.log('isHot被修改了' ,newValue, oldValue, this);
+        })
+        //注意，使用Vue管理時要用普通函數，不要用箭頭函數，否則this會指向window
+
+
+    </script>
+</body>
+</html>

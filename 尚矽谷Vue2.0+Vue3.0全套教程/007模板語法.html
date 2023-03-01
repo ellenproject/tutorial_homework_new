@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>007模板語法</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 插值語法 -->
+    <!-- 
+        <h1>Hello, {{name.toUpperCase()}}，{{age}}</h1>
+        {{age}}即是插值語法
+        什麼時候用插值，什麼時候用指令？
+        插值語法往往用於標籤體內容，標籤體是指，起始肉容<h1>與結束內容</h1>中間即是標籤體
+        指令語法管理標籤屬性
+    -->
+    <!-- 
+        Vue語法有2大類：
+        1.插值語法
+            功能：用於解析標籤體內容
+            寫法：{{xxx}}，xxx是js表達式，且可以直接讀取到data中的所有屬性。
+        2.指令語法
+            功能：用於解析標籤〈包始：標籤屬性、標籤體肉容、綁定事件…﹚
+            舉例：v-bind:href=""或 簡寫為:href="xxx"，xxx同樣要寫js表達式，
+                    且可以直接讀取到data中的所有屬性。
+            備註：Vue中有很多的指令，且形式都是：v-????, 此處我們只是拿v-bind舉個例子。
+
+     -->
+
+    <div id="root">
+        <h1>插值語法</h1>
+        <h3>你好，{{name}}</h3>
+        <hr>
+        <h1>指令語法</h1>
+        <a v-bind:href="school.url.toUpperCase()" v-bind:x="hello">點我去{{school.name}}學習1</a>
+        <a :href="school.url" :x="school.hello">點我去尚矽谷學習2</a>
+        <a :href="Date.now()">現在時間戳</a>
+        <!-- v-bind:可以簡寫成: -->
+    </div>
+
+
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false  //阻止Vue在啟動時生成生產提示
+
+        new Vue({
+            el: '#root',
+            data: {
+                name: 'Jack',
+                school:{
+                    name: 'Rose',
+                    url: 'http://www.atguigu.com',
+                    hello: '你好'
+                }
+            }
+        })
+    </script>
+</body>
+</html>

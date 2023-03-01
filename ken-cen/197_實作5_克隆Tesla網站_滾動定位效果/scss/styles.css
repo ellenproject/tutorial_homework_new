@@ -1,0 +1,273 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap");
+:root {
+  --normal-font-size: .9rem;
+  --h2-font-size: 2rem;
+}
+
+@media screen and (min-width: 600px) {
+  :root {
+    --h2-font-size: 2.5rem;
+  }
+}
+
+*, ::before, ::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-weight: bold;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+p {
+  font-size: var(--normal-font-size);
+}
+
+header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: black;
+  z-index: 100;
+}
+
+.nav {
+  margin: 0 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 3rem;
+  font-size: var(--normal-font-size);
+  font-weight: 500;
+}
+
+.nav_logo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.nav_logo img {
+  width: 100px;
+}
+
+.nav_menu {
+  display: none;
+}
+
+.nav_toggle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav_link {
+  color: black;
+}
+
+.nav_button {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 0.12rem;
+  padding: 0.3rem 1rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 1200px) {
+  .nav_menu {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .nav_item {
+    margin-left: 2rem;
+  }
+  .nav_list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .nav_toggle {
+    display: none;
+  }
+}
+
+main {
+  height: 100vh;
+  overflow-y: scroll;
+  -ms-scroll-snap-type: y mandatory;
+      scroll-snap-type: y mandatory;
+}
+
+#model_s {
+  background-image: url("http://ken-cens.com/~kencensc/tesla/img/model-s.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+#model_y {
+  background-image: url("http://ken-cens.com/~kencensc/tesla/img/Model-Y.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+#model_3 {
+  background-image: url("http://ken-cens.com/~kencensc/tesla/img/Model-3.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+#model_x {
+  background-image: url("http://ken-cens.com/~kencensc/tesla/img/Model-X.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+#solar_panels {
+  background-image: url("http://ken-cens.com/~kencensc/tesla/img/SolarPanels.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+#solar_roof {
+  background-image: url("http://ken-cens.com/~kencensc/tesla/img/solar-roof.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.home {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.home .car_model {
+  position: fixed;
+  top: calc(10vh + 3rem);
+}
+
+.home .car_model_title {
+  font-size: var(--h2-font-size);
+  font-weight: 500;
+  text-align: center;
+  line-height: 80%;
+}
+
+.home .car_model_paragraph {
+  font-size: var(--normal-font-size);
+  letter-spacing: 0.07rem;
+  text-underline-offset: 4px;
+}
+
+.home .car_model_link {
+  color: black;
+  text-decoration: underline;
+}
+
+.home_button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-size: var(--normal-font-size);
+  font-weight: 500;
+  position: fixed;
+  bottom: 10vh;
+  row-gap: 1rem;
+}
+
+@media screen and (min-width: 600px) {
+  .home_button {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-column-gap: 1.5rem;
+            column-gap: 1.5rem;
+  }
+}
+
+.home_button_order, .home_button_exist {
+  width: 90vw;
+  height: 2.5rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: .2rem;
+  letter-spacing: .05rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.home_button_order a, .home_button_exist a {
+  color: white;
+}
+
+@media screen and (min-width: 600px) {
+  .home_button_order, .home_button_exist {
+    width: 12.5rem;
+  }
+}
+
+@media screen and (min-width: 840px) {
+  .home_button_order, .home_button_exist {
+    width: 16.5rem;
+  }
+}
+
+.home_button_exist {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.home_button_exist a {
+  color: black;
+}
+/*# sourceMappingURL=styles.css.map */

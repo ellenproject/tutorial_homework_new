@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Video Mask Animation - ScrollMagic & Greensock</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+        }
+        html{
+            height: 1674px;
+            font-weight: 100;
+        }
+        body{
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 50em;
+        }
+        p{
+            font-size: 64px;
+            color: #fff;
+            letter-spacing: 10px;
+        }
+        .nextSection{
+            height: 800px;
+            background-color: lightslategrey;
+            position: relative;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container{
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .svg-container{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+        }
+        svg{
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            display: block;
+        }
+        svg text {
+            text-anchor: middle;
+        }
+        svg mask rect {
+            fill: white;
+        }
+        svg > rect {
+            fill: white;
+            mask: url(#myMask);
+            -webkit-mask: url(#myMask);
+        }
+        .video-container{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            overflow: hidden;
+        }
+        video{
+            min-height: 100%;
+            min-width: 100%;
+            height: 150%;
+            width: 150%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            /* clip-path: circle(450px at center); */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920px" height="1080px" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <mask id="myMask" x="0" y="0" width="1920" height="1080">
+                        <rect x="0" y="0" width="1920" height="1080" />
+                        <text x="960" y="1em">X</text>
+                    </mask>
+                </defs>
+                <rect x="0" y="0" width="1920" height="1080" />
+            </svg>
+        </div>
+        <div class="video-container">
+            <video id="video" autoplay playsinline muted="muted" preload="auto" loop="loop" poster="">
+                <source src="./video/Lewis Capaldi - Someone You Loved _ 1 Minute Lyric Video.mp4"></source>
+            </video>
+        </div>
+    </div>
+    <section class="nextSection">
+        <p>Hello</p>
+    </section>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/animation.gsap.min.js"></script>
+    <script>
+        // Greensock
+        var tl = new TimelineMax();
+
+        tl.add(
+            TweenMax.to('.video-container', 1, {scale: 0.5, transformOrigin: "50%, 50%", ease: Power2.easeInOut})
+        )
+        tl.add(
+            TweenMax.to(".svg-container", 1, {scale: 4.5, transformOrigin: "50%, 50%", ease: Power2.easeInOut}),
+            "-=1"
+        )
+
+        //ScrollMagic
+        var controller = new ScrollMagic.Controller();
+
+        //container pin
+        var startpin = 
+        new ScrollMagic.Scene({
+            duration: 800
+        })
+            .setPin(".container")
+            .addTo(controller);
+
+        //tween
+        new ScrollMagic.Scene({
+            duration: 500
+        })
+            .setTween(tl)
+            .addTo(controller);
+        
+        $('video').get(0).play();
+        
+        
+
+    </script>
+</body>
+</html>

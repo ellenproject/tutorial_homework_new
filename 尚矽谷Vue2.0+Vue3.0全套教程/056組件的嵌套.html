@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>055組件的幾個注意事項</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+
+    <div id="root">
+        <app></app>
+    </div>
+
+    
+    
+
+    <script>
+        Vue.config.productionTip = false
+
+        //定義student組件
+        //因為要先有student，後續的school才找得到student，所以student放到school前面
+        const student = Vue.extend({
+            name: 'student',
+            template:`
+            <div>
+                <h2>學生名稱：{{name}}</h2>
+                <h2>學生地址：{{age}}</h2>
+            </div>
+            `,
+            data(){
+                return {
+                    name:'Jake',
+                    age:18
+                }
+            }
+        })
+
+        //定義school組件
+        //<student></student>寫在template，因為註冊給誰，就去誰的結構裡寫
+        const school = Vue.extend({
+            name: 'school',
+            template:`
+            <div>
+                <h2>學校名稱：{{name}}</h2>
+                <h2>學校地址：{{address}}</h2>
+                <student></student>
+            </div>
+            `,
+            data(){
+                return {
+                    name:'Jake',
+                    address:'Taipei'
+                }
+            },
+            //註冊組件﹙局部﹚
+            components:{
+                student
+            }
+        })
+
+        //定義hello組件
+        const hello = Vue.extend({
+            template:`
+            <div>
+                <h1>{{msg}}</h1>
+            </div>
+            `,
+            data(){
+                return {
+                    msg: '歡迎來到Jake學習！'
+                }
+            }
+        })
+
+        //定義app組件
+        //app是一人之下，萬人之上。一人，指vm，萬人，指所有組件
+        const app = Vue.extend({
+            template:`
+            <div>
+                <hello></hello>
+                <school></school>
+            </div>
+            `,
+            components:{
+                school, 
+                hello
+            }
+        })
+
+        //創建vm
+        new Vue({
+            el:'#root',
+            //註冊組件﹙局部﹚
+            components:{
+                app
+            }
+        })
+    </script>
+</body>
+</html>

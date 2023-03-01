@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>this指向的問題</title>
+</head>
+<body>
+    <button id="btn1">button1</button>
+    <button id="btn2">button2</button>
+    <script>
+        let obj = {
+            name: "張三",
+            age: 20, 
+            sayHi: function(){
+                console.log(`大家好！我叫${obj.name}，今年${obj.age}歲`);
+            }, 
+            sayHello: function(){
+                // 方法裡面的this是什麼？誰在調用這個方法，this 就指向誰
+                console.log(`大家好！我叫${this.name}，今年${this.age}歲`);
+            }, 
+            fun1: function(){
+                //沒有任何對象調用的方法，方法裡面的this指向window對象
+                //要讓this指向obj，有兩種方式，第一種方式：改成箭頭函數，原因如下句
+                //注意：箭頭函數中的this指向外層函數中的this，如果外層已經沒有函數了，指向window
+                return ()=>{ 
+                    console.log(`哈哈！我是${this.name}，今年${this.age}歲`);
+                }
+
+                //要讓this指向obj，有兩種方式，第二種方式：在外層把this備分一下﹙用that備分this﹚
+                let that = this 
+                return function(){
+                    console.log(that);
+                    console.log(`哈哈！我是${that.name}，今年${that.age}歲`);
+                }
+            }
+        }
+        obj.sayHi();
+        obj.sayHello();
+        console.log('----------------------------');
+
+        let obj2 = {
+            name: "李四",
+            age: 30,
+        }
+
+
+        //我們將obj1的方法體給obj2賦值一份
+        //背後的原理是：obj2的sayHi方法指向obj1的sayHi方法的方法體
+        obj2.sayHi = obj.sayHi
+        obj2.sayHello = obj.sayHello
+        obj2.sayHi()
+        obj2.sayHello()
+        //sayHi方法裡面的是obj，sayHello方法裡面的是this
+        //為什麼喜歡把方法裡面的obj用this？因為this的好處是：我可以把這個方法體給任何對象使用
+        //用this的話，當調用對象不同，會根據調用對象而指向該調用對象
+        //用obj的話，由於已經寫死obj，所以即使調用對象不同、也只會指向obj，而不是指向該調用對象
+        //如果這個方法不考慮給任何人用，只給obj用，那寫死obj沒有問題；
+        //但如果這個方法之後可能給別人用，那最好就寫this
+        //很多時候為了代碼簡潔度，我們會將某一個對象的方法，複用給很多對象
+        
+        console.log('============================');
+        obj.fun1()()
+
+
+        //就是給btn1對象添加了一○onclick方法，        
+        btn1.onclick = function(){
+            //這個胡法體裡面的this，就指向btn1
+            console.log(this);
+        }
+
+        //將btn1的事件方法給btn2一份
+        //其實就是：btn2點擊的時候，會觸發btn1的onclick對應的方法體。
+        //誰在觸發這個方法，this就指向誰
+        //意思是：雖然是btn1的方法體被觸發，但由於點擊的是btn2，所以指向btn2
+        btn2.onclick = btn1.onclick
+
+    </script>
+</body>
+</html>

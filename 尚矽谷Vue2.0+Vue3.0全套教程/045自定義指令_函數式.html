@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>045.自定義指令_函數式</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        需求1.定義一個v-big指令，和v-text功能類似，但會把綁定的數值放大10倍。
+    -->
+
+
+    <div id="root">
+        <h2>{{name}}</h2>
+        <h2>當前的n值是：<span v-text="n"></span></h2>
+        <h2>放大10倍後的n值是：<span v-big="n"></span></h2>
+        <button @click="n++">點我n+1</button>
+    </div> 
+    
+
+    
+    <script>
+        Vue.config.productionTip = false
+
+        new Vue({
+            el:'#root',
+            data:{
+                name:'Jake',
+                n:1,
+            },
+            directives:{
+                //v-big：自定義指令。自定義指令其實就是個函數 => big(){}
+                //想要把n值X10倍放到span中，要如何實現？ =>計算屬性，比如寫f{{ullName}}
+                //計算屬性的簡寫方式是：fullName(){return 值 } return返回的值就會放到span中
+                //因此這邊好像也是這樣寫的：big(){return 值} 就會放到span中，但不是這樣的，而是靠big所收到的參數
+                //即big(a,b)，a跟b即參數，文檔裡面的a跟b其實是element跟binding，把元素ex.span跟指令ex.v-big綁定
+                //binding綁定對象：v-big為什麼不控制button？因為v-big不是寫在button，而是寫在span
+                big(element,binding){
+                    console.log("big");
+                    element.innerText = binding.value * 10
+                    //binding綁定對象，我們更關注的是綁定對象裡面的value，即binding.value
+                    //span真實的DOm元素即element。綁定的值我們也可以透過binding.value取得，
+                    //接下來就開始原生DOM操作：element.innerText指修改元素裡的文本內容，他的值就是binding裡的value，然後再X10
+                    //按下button後，當前的值會變是確定的，那放大10倍後的值會不會變？這要取決於有沒有調用big函數
+
+                    //big函數何時會被調用？
+                    //1.指令與元素成功綁定時﹙一上來﹚
+                    //2.指令所在的模板被重新解析時。 //指令語法可回去看007模板語法
+                    //2的意思：只要修改data裡的數據，就會引起頁面重新解析，而頁面一重新解析，v-big為了給你精準的值，就會重新調一次big函數
+                }
+            }
+        })
+    </script>
+</body>
+</html>

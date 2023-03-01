@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>025watch對比computed</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        computed和watch之間的區別：
+            1.computed能完成的功能，watch都可以完成。
+            2.watch能完成的功能，computed不一定能完成，例如：watch可以進行異步操作。
+        兩個重要的小原則：
+            1.所有被Vue管理的函數，最好寫成普通函數，這樣this的指向才是vm 或 組件實例對象。
+            2.所有不被Vue所管理的函數﹙定時器的回調函數、ajax的回調函數等、Promise的回調函數﹚，最好寫成箭頭函數，
+            這樣this的指向才是vm 或 組件實例對象。
+     -->
+    <div id="root">
+        姓：<input type="text" v-model="firstName"> <br/><br/>
+        名：<input type="text" v-model="lastName"> <br/><br/>
+        全名：<span>{{fullName}}</span> <br/><br/>
+    </div>
+
+
+    <script>
+        Vue.config.productionTip = false
+ 
+        const vm = new Vue({
+            el: '#root',
+            data:{
+                firstName: '張',
+                lastName:'三',
+                fullName:'張-三'
+            }, 
+            watch:{
+                firstName(val){
+                    this.fullName = val + '-' + this.lastName
+                    //可以開啟異步任務：可以一秒後再返回值
+                    // setTimeout(() => {
+                    //     this.fullName = val + '-' + this.lastName
+                    // }, 1000);
+                    //備註：setTimeout的函數不是Vue所=管理的函數，所以才可以用箭頭函數
+                },
+                lastName(val){
+                    this.fullName = this.firstName + '-' + val
+                }
+            }
+        })
+    </script>
+</body>
+</html>

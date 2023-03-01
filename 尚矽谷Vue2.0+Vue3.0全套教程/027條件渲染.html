@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>027條件渲染</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        條件渲染：
+        1.v-if
+            寫法：
+                (1).v-if="表達式"
+                (2).v-else-if="表達式"
+                (3).v-else="表達式"
+            適用於：切換頻率較低的場景。
+            特點：不展示的DOM元素直接被移除。
+            注意：v-if可以和:v-else-if、v-else一起使用，但要求結構不能被「打斷」
+
+        2.v-show
+            寫法：v-show="表達式"
+            適用於：切換頻率較高的場景。
+            特點：不展示的DOM元素未被移除，僅僅是使用樣式隱藏掉。
+
+        3.備註：使用v-if的時候，元素可能無法獲取到，而使用v-show一定可以獲取到。
+     -->
+
+     
+    <div id="root">
+        <h2>當前的n值是{{n}}</h2>
+        <button @click="n++">點我n+1</button>
+        <!-- 使用v-show做條件渲染 -->
+        <!-- <h2 v-show="false">歡迎來到{{name}}</h2> -->
+        <!-- <h2 v-show="1 === 3">歡迎來到{{name}}</h2> -->
+
+        <!-- 使用v-if做條件渲染 -->
+        <!-- <h2 v-if="false">歡迎來到{{name}}</h2> -->
+        <!-- <h2 v-if="1 === 3">歡迎來到{{name}}</h2> -->
+
+        <!-- <div v-show="n === 1">Angular</div>
+        <div v-show="n === 1">React</div>
+        <div v-show="n === 3">Vue</div> -->
+
+        <!-- 何時用v-show？何時用v-if？如果這個東西有很高的切換頻率、變化得很頻繁，用v-show；頻率低的用v-if -->
+
+        <!-- <div v-if="n === 1">Angular</div>
+        <div v-if="n === 1">React</div>
+        <div v-if="n === 3">Vue</div> -->
+        
+        <!-- if是一組判斷，如果條件成立，就會一起顯示；else if是多組判斷，一個條件成立後往下 -->
+
+        <!-- v-else和v-else-if -->
+        <!-- 注意： if跟else if要寫在一起，不能斷開，比如下面加了@就斷開了，會判斷不到@以下的div。
+            邏輯是：要有if才有資格聊else-if，那如果斷開了，前面沒有if，要怎麼做後面的判斷-->
+        <!-- <div v-if="n === 1">Angular</div> -->
+        <!-- <div>@</div> -->
+        <!-- <div v-else-if="n === 1">React</div> -->
+        <!-- <div v-else-if="n === 3">Vue</div> -->
+        <!-- <div v-else>哈哈</div> -->
+        
+        <!-- if跟else if的用法跟JS一樣，如果if條件成立了，就不用往下看else if -->
+        <!-- 前面判斷都不成立，就會跑到else，因此else後面的""條件寫不寫其實都沒差 -->
+        
+        <template v-if="n === 1">
+            <h2>你好</h2>
+            <h2>Jake</h2>
+            <h2>Taipei</h2>
+        </template>
+        
+        <!-- 原本是每個h2後面都有v-if，但這樣寫太瑣碎，解法是把每個h2用template包起來，只寫一個v-if。
+            用template而不用div包，這樣就不會破壞結構。注意：template只能配合v-if，而不能配合v-show -->
+
+    </div>
+
+
+
+    <script>
+        Vue.config.productionTip = false
+
+        const vm = new Vue({
+            el:'#root',
+            data:{
+                name: 'Jake',
+                n: 0,
+            }
+        })
+    </script>
+</body>
+</html>

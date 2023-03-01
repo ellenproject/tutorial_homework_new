@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>追蹤滑鼠軌跡</title>
+    <style>
+        :root{
+            --factor: 1;
+        }
+        body{
+            background-color: #000;
+        }
+        #ball, .halo{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #FBD771;
+            position: absolute;
+        }
+        .halo{
+            opacity: 0.15;
+        }
+        .halo:nth-of-type(1){
+            --factor: 0.3;
+        }
+        .halo:nth-of-type(2){
+            --factor: 0.6;
+        }
+        .halo:nth-of-type(3){
+            --factor: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        目標： 
+        1. 圓形必須跟蹤坐標：必須知道坐標位置，x軸坐標跟y軸坐標
+        2. 希望做延遲：滑鼠移動到某個地方後，球體再慢慢移動過去。他們之間是有些距離的，然後再慢慢縮減。
+        3. 圓形外側的括弧，這個括弧是根據滑鼠跟球體的距離跟著放大，如果距離縮小，括弧就跟著縮小。
+        4. 滑鼠跟球體之間的距離就是非常重要的考量數據。
+    -->
+
+    <!-- 思路 -->
+
+    <div id="ball">
+        <div class="halo"></div>
+        <div class="halo"></div>
+        <div class="halo"></div>
+    </div>
+
+    <script src="./Ball.js"></script>
+    <script>
+        // let x;
+
+        const ball = document.getElementById('ball');
+        //dataset可以取得data裡的值，比如data-name="Ball"跟data-mouse-x="9"，可以取得name:'Ball'跟mouseX:'9'
+        // console.log(ball.dataset);
+        const myBall = new Ball(ball);
+
+        //因為球體的直徑是固定的，不需要每次都計算，所以放在外面而不要放在delayMotion裡面，
+        //delayMotion裡面放的是會一直重複計算的，能不放就不放，不然要計算很多東西，會佔存很多
+        //要parseInt轉換成數字，不然無法運算
+        myBall.diameter = parseInt(getCssValue(ball, "width"));
+
+        //滑鼠跟球體的距離最大時，光暈也是最大。
+        //所以距離最重要：距離為0時，光暈就還原；距離最大，光暈最大。
+        //需要將x軸座標跟y軸座標做綜合考慮，而不是單做x軸或單做y軸。
+        //把所有光暈一起做處理：一起做放大的倍數。
+        const halos = document.getElementsByClassName("halo");
+
+        document.addEventListener("mousemove", e =>{
+            //程式是從上往下，mousemove每次滑鼠移動，就會給x賦值，
+            //但同時，console.log又輸出x，當滑鼠不移動時就不會賦值，
+            //所以為了實現這個功能﹙﹚，
+            //我們要添加另一個監聽事件，來看當程序完成後再去觸發監聽事件會如何：
+            //當我們只是滑鼠移動只會得到undefined的結果﹙代表的是全局變數x為undefined﹚，
+            //當我們點按球體時，就改變x的值，會得到x=100，代表全局變數x被改變了。
+            //代表我們可以把透過監聽事件得到的x值傳遞出去，但問題來了：全局變數x可能被錯誤修改或汙染到其他變數。
+            // console.log(x);
+            //有沒有方法可以讓監聽事件裡的x傳遞出去、同時不會被隨意修改？ =>dataset 
+            //透過dataset放入x軸跟y軸座標，並把ball.dataset.mouseX放入球體的click監聽事件，
+            //就可以在監聽事件裡面獲取滑鼠所在的座標，並且可以在外邊(此處指點擊球體的監聽事件裡)運用座標位置。
+            
+            //我們希望在滑鼠移動時，把滑鼠移動的座標放到x裡面，
+            //所以用dataset取得：
+            //在ball裡放入dataset：data-mouse-x會自動轉成mouseX，data-move-y會自動轉成moveY。以此類推。
+            //e.clinetX是x軸
+            //看HTML裡，會出現<div id="ball" data-mouse-x="1897" data-mouse-y="293">，隨滑鼠移動改變座標數值
+            // ball.dataset.mouseX = e.clientX;
+            // ball.dataset.mouseY = e.clientY;
+            myBall.mouseX = e.clientX;
+            myBall.mouseY = e.clientY;
+        });
+
+        
+        // ball.addEventListener("click" , e =>{
+        //     // x = 100;
+        //     console.log(ball.dataset.mouseX);
+        // })
+
+        //step2. 製作球體隨滑鼠效果：由於圖片是連續的，所以不能用setTimeout(只會使用一次)
+        //使用setInterval或是requestAnimationFrame，可以連續繪製多個圖片。
+        //兩者差異在於，當開啟別的網頁後，還會不會在後台運行，setInterval仍然會運行，所以很佔據計算資源。
+        //所以選擇requestAnimationFrame會加快性能。
+
+        // let t1 = 0;
+        // setInterval(() => {
+        //     t1++;
+        //     console.log("setInterval:", t1);
+        // }, 1000/60);
+
+        // let t2 = 0;
+        // function delayMotion(){
+        //     t2++;
+        //     console.log("requestAnimationFrame:", t2);  
+        //     requestAnimationFrame(delayMotion); 
+        // }
+        // requestAnimationFrame(delayMotion); 
+        
+        //step2.的運行原理：requestAnimationFrame會看瀏覽器是否有空，有空就會運行delayMotion這個function
+        //delayMotion這個function是用來繪製新圖片用的。
+        //如果放在外面，只會運行一遍。所以這段也要放在function delayMotion()裡面，
+        //這樣當第一次調用requestAnimationFrame(delayMotion)就可以不斷調用functioin delayMotion()，才能無限循環。
+        //當我們運行AnimationFrame()還會返回給我們一個訊息，就是()裡面的信息，所以塞返回時間就會給我們返回時間的信息。
+        //定義lastTime，讓其存放的是上一次運行delayMotion的時間，即存放currentTime。
+        //接著定義diff，獲取兩個delayMotion(即lastTime及currentTime這兩個delayMotion)的時間間隔。
+
+        // let lastTime;
+        // ball.style.left = 0;  //因為typeof發現ball.style.left是一個字串所以有必要先初始化一個值=0
+        
+
+        // function delayMotion(currentTime){
+        //     const diff = currentTime - lastTime;
+        //     console.log(diff);
+
+        //     我們希望ball.style.left每次都是一個新的值，因此ball.style.left = (ball.style.left) + diff
+        //     那因為右邊的ball.style.left是一個變數，所以要用{}包起來，加上初始化是一個整數0，但我們希望他有小數點所以要轉換
+        //     這個小數點我們希望他每次都有增長，而增長的就是我們相差的值(diff)，再相乘他相差的時間，
+        //     這個相差時間如果定義的小一點，就會移動小一點。
+        //     因為我們原本parseFloat(ball.style.left)是0嘛，每次加(diff * 一個時間)，
+        //     這個時間越小，我們移動速度就越慢。希望後面移動是百分比所以加上百分號%
+        //     ball.style.left = `${parseFloat(ball.style.left) + diff * 0.1}%`;
+            
+        //     lastTime = currentTime;
+        //     requestAnimationFrame(delayMotion); 
+        // }
+
+        // requestAnimationFrame(delayMotion); 
+
+        //因為有可能修改圓形的大小，所以不要寫死d，而是用js來獲取圓形大小
+        //(要獲取的元素，要獲取的該元素的css屬性)
+        function getCssValue(element, cssName){
+            //getComputedStyle獲取該元素的樣式
+            //返回該元素眾多的css屬性裡 ，我們需要的css屬性
+            const root_style = getComputedStyle(element);
+            return root_style.getPropertyValue(cssName);
+        }
+        
+        
+
+        //希望把滑鼠的座標轉換成球體的坐標，x=座標，d=對應的直徑。
+        function convertToBall(x, d){
+            //x或y的值，減去直徑的一半(即半徑)，然後把結果存放在對應的x或y裡面
+            //x軸跟y軸座標會不斷改變，所以需要把它放到delayMotion裡面去處理
+            x = x - d / 2;
+            return x;
+        }
+        
+        function delayMotion(){
+            //因為運作不是規律的所以不用currentTime，
+            
+            //distance_x是滑鼠的x座標
+            //x座標的距離隨著強度strength累積
+            let distance_x = myBall.mouseX - myBall.ballX;
+            distance_x *= myBall.strength;
+            
+            myBall.ballX += distance_x;
+
+            let distance_y = myBall.mouseY - myBall.ballY;
+            distance_y *= myBall.strength;
+            
+            myBall.ballY += distance_y;
+
+            //要用循環的方式處理光暈
+            for (const halo of halos) {
+                let factor = getCssValue(halo, "--factor");
+                //定義一個放大的係數
+                let scaler = distance_x + distance_y;
+                halo.style.transform = `scale(${factor * scaler * myBall.drag})`
+            }
+
+            //x軸跟y軸座標會不斷改變
+            let pos_x = convertToBall(myBall.ballX, myBall.diameter);
+            let pos_y = convertToBall(myBall.ballY, myBall.diameter)
+
+            //因為不是左右移動，所以也不用left
+            ball.style.transform = `translate(${pos_x}px, ${pos_y}px)`;
+            requestAnimationFrame(delayMotion); 
+        }
+
+        requestAnimationFrame(delayMotion); 
+
+        
+        //獲取x軸座標跟y軸坐標
+        // console.log(e.clientX, e.clientY);
+
+        //如果需要用到渲染、重新繪圖的話，我們不要把重複或循環的過程放到一起，我們需要把循環次數減少：
+        //因為每次監聽，會返回一次滑鼠坐標，每循環一次就計算繪圖=增加渲染的負擔，佔據CPU跟內存，
+        //所以要把x軸跟y軸放在滑鼠事件外進行渲染。
+
+        //有兩個動畫效果，第一個是滑鼠延遲移動過去(可透過animation duration將時間長度變長一點)
+        //但這個animation duration沒辦法跟第二個動畫效果有關。第二個：隨著加速度的參數而光暈變大變小
+        //與其分成兩個部分做，不如把滑鼠延遲的效果也做成加速度，這樣只要趨動一個加速度的數據，就可以做出兩個動畫效果。
+        //我們滑鼠移動時，球形先慢一點，他們之間有個距離，這個距離用一個常數來慢慢變小、累積、相加，
+        //把這個累積的值放到x或y座標上面，然後始終會回到滑鼠的位置。
+        //綜上，球形的x跟y必須是一個可以不斷累積的數。
+    </script>
+
+</body>
+</html>

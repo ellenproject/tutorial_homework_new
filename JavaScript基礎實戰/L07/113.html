@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>閉包函數</title>
+</head>
+<body>
+    <script>
+        function fun1(){
+            let num = 100
+            return function(){
+                //由於裡面的方法，用到了外面方法定義的變量，所以外面方法中定義的變量會一直保存在內存中，
+                //這就是閉包。
+                num++
+                return num
+            }
+        }
+
+
+        let a = fun1()
+        console.log(a());
+        console.log(a());
+        console.log(a());
+        console.log('-------------------');
+
+        let b = a
+        console.log(b());
+        console.log(b());
+        console.log(b());
+    </script>
+</body>
+</html>

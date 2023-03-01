@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>019姓名案例_計算屬性實現</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        姓：<input type="text" v-model="firstName"> <br/><br/>
+        名：<input type="text" v-model="lastName"> <br/><br/>
+        全名：<span>{{fullName}}</span> 
+    </div>
+
+
+    <script>
+        Vue.config.productionTip = false
+ 
+        const vm = new Vue({
+            el: '#root',
+            data:{
+                firstName: '張',
+                lastName:'三',
+            }, 
+            computed:{
+                //寫computed{}的意思：就是現在要計算了；
+                //那計算出來的東西叫什麼，叫做fullName；
+                //那具體怎麼計算呢？就要寫成一個對象，fullName{}；
+                //對象裡面包含什麼？讀取的時候用的getter跟修改的時候用的setter
+                //完整寫法
+                /*
+                fullName:{
+                    get(){
+                        console.log('get被調用了');
+                        return this.firstName + '-' + this.lastName
+                    },
+                    set(value){
+                        console.log('set',value);
+                        const arr = value.split('-')
+                        this.firstName = arr[0]
+                        this.lastName = arr[1]
+                    }
+                }
+                */
+               //簡寫 //注意：只有在考慮讀取，不考慮修改的時候，才可以用簡寫
+               fullName(){
+                console.log('get被調用了');
+                return this.firstName + '-' + this.lastName
+                //不能開啟異步任務：無法一秒後再返回值
+                // setTimeout(() => {
+                //     return this.firstName + '-' + this.lastName
+                // }, 1000);
+               }
+            }
+        })
+    </script>
+</body>
+</html>

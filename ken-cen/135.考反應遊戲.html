@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考反應遊戲</title>
+    <style>
+        body{
+            background-color: #ffc5db;
+        }
+        h1, p{
+            color: #ff70a7;
+        }
+        #box{
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            position: relative;
+            background-color: violet;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        思路：
+        1. 點擊box後，讓box消失
+        2. 獲取時間差，顯示到反應時間裡面﹙時間差=點擊box時間 - 創建新的box時間﹚
+        3. 創建一個新的box
+     -->
+    <h1>考考您的反應！</h1>
+    <p>反應時間：<span id="time">0</span></p>
+    <div id="box"></div>
+
+
+    <script>
+
+        let box = document.getElementById('box');
+        let title = document.getElementsByTagName('h1')[0];
+        let paragraph = document.getElementsByTagName('p')[0];
+
+        let createdTime = 0; //定義創建盒子的時間，預設是0
+        let clickedTime = 0  //定義用戶點按盒子的時間，預設是0
+        let reactionTime = 0 //定義上面兩個相減，即用戶反應的時間，初始化是0
+
+        /*改變位置方法*/
+        function get_fullHeight(block){
+            let height = block.offsetHeight;
+            let style = window.getComputedStyle(block);
+            height = height + parseInt(style.marginTop) + parseInt(style.marginBottom);
+            return height;
+        }
+
+        /*改變顏色方法*/
+        function get_randomRange(min, max){
+            let difference = max - min;
+            let rand = Math.random();
+            rand = Math.floor(rand * difference) + 1 + min;
+
+            return rand;
+        }
+        
+        function makeBox(){
+            let time = Math.random();
+            time = Math.floor(time * 2000) + 1;
+
+            setTimeout(function(){
+                /*改變形狀*/
+                if(Math.random() > 0.5){
+                    box.style.borderRadius = "50%";
+                }else{
+                    box.style.borderRadius = "0";
+                }
+
+                /*改變顏色*/
+                let green = get_randomRange(50, 200);
+                let color = "rgba(255," +green+ ", 100, 1.0)";
+                box.style.backgroundColor = color;
+
+                box.style.display = "block";//需要先創建盒子再去移動它，否則高與寬會與移動後的設定不一樣，可能會超出視窗大小。
+                /*改變位置*/
+                let box_size = get_fullHeight(box);
+                let h1_size = get_fullHeight(title);
+                let p_size = get_fullHeight(paragraph);
+                let remain_height = box_size + h1_size + p_size;
+                console.log(remain_height);
+
+                let top = Math.floor(Math.random() * (window.innerHeight - remain_height) + 1);
+                let left = Math.floor(Math.random() * (window.innerWidth - box_size) + 1);
+
+                box.style.top = top + "px";
+                box.style.left = left + "px";
+
+                
+                createdTime = Date.now();
+            }, time);
+        }
+        
+        makeBox();
+
+        box.onclick = function(){
+            box.style.display = "none";
+
+            clickedTime = Date.now();  
+            reactionTime = (clickedTime - createdTime) / 1000
+
+            document.getElementById('time').innerHTML = reactionTime;
+            
+            makeBox();
+        }
+
+        
+        //step0. 首先一開始就先運行創建盒子的時間makeBox()，讓它去創建盒子，就得到了創建盒子的時間createdTime = Date.now();
+        //step1. 然後用戶點按它的時候先讓它消失，並且用我們當前點按的時間clickedTime減去剛才創建的時間createdTime，來獲取反應時間。
+        //       Date.now()是指，現在時間到1970/1/1的時間。
+        //       reactionTime = (clickedTime - createdTime) / 1000  
+        //       獲取用戶點按的時間，並把它存放在clickTime。
+        //       再跟一開始創建方形的時間間隔做相減。由於出來的是毫秒，所以除以1000來得到秒。
+        //       創建盒子的時間從哪裡來呢？寫函式：function makeBox(){createdTime = Date.now();}
+        //       為何創建盒子要寫成函式：
+        //       首先，一開始就要調用，因為要知道創建盒子的時間(此指初始方形盒子)，才能知道創建盒子的時間。
+        //            然後在點按它的時候，讓盒子消失。並且讓當前點按時間-創建盒子時間來獲取反應時間。
+        //       其次，在點按盒子讓其消失時，也要調用makeBox()，才能在消失的同時又創建盒子。
+        //            此時為了創建盒子，要加上display = "block"。
+        //step2. 最後就把反應時間丟到頁面上time.innerHTML = reactionTime;
+        //step3. 記錄反應時間的同時，就要創建盒子，所以要調用一次makeBox();
+        //       這時有個問題，就是點按盒子時雖然讓它消失display = "none"，但同時也創建盒子makeBox(){display = "block"};
+        //       問題點在於，點按盒子及創建盒子，他們之間沒有時間間隔。
+        //       所以要把創建盒子的時間往後推，使用setTimeout，來創造「消失盒子與創建盒子之間的」時間間隔。
+        //       setTimeout(function, time)，time不想使用固定的時間，所以來寫一個隨機時間
+        //       Math.random()來創造0~0.9999的隨機數，再用Math.floor()來創造整數，
+        //       由於Math.random()是毫秒、因此要變成秒就要先 * 1000。比如0.0001*1000=1秒，那我們想創造兩秒的間隔，就*2000，
+        //       +1的原因：如果只*2000，隨機數範圍會是0~1999.9999。另外，首先不想要它是零秒所以+1，其次想讓它可能達到2秒的時間延遲所以+1
+        //step4. 每次盒子的形狀不一樣，生成的隨機值是0~0.9999，所以可以用if語句來判斷一下，
+        //       如果大於0.5就是圓形，否則就是方形。這樣是圓是方的機率就是相等的狀況。
+        //step5. 每次盒子的顏色都不一樣：首先定義一個顏色let color，這個顏色其中一個數值是隨機的let green，
+        //       寫函式接住green範圍get_randomRange(min,max)，定義差距difference = max-min，定義隨機數=Math.random()，
+        //       隨機數rand = 整數(隨機*差距) + 1 + 最小值，記得回傳return rand。
+        //step6. 改變位置，首先看高度，盒子移動高度的範圍是：
+        //       視窗高度window.innerHeight  扣掉  盒子本身(定義box)+h1(定義title)+p(定義paragraph)的高度(remain_height)
+        //       盒子本身+h1+p的高度，可以寫成函式get_fullHeight()來獲取
+        //       let top因為高度是隨機的，所以是Math.floor(Math.random() * (視窗高度 - 剩餘高度) + 1)
+        //       * (視窗高度 - 剩餘高度) + 1   即是random()要乘以的盒子可移動範圍。
+        //       回到get_fullHiehgt，來看如何獲得單一元素的高度：
+        //       首先定義高度=block的offsetHeight，其次定義樣式=block的getComputedStyle()，
+        //       總高度height = block本身高度(offsetHeight)+style樣式上高度+style樣式下高度。記得回傳return height。
+
+        /* 
+        el.onclick = function(){
+            // el.style.transition = "opacity 1s"; 透明度漸變0
+            setInterval(() => {
+                el.style.display = "none";
+            }, 0);
+
+
+            let dt= new Date().getSeconds();
+            let timer = document.getElementById('getTime');
+            timer.innerHTML = dt + '秒';
+            
+        };
+        */
+        
+        
+
+        // function colorCode(){
+        //     let makingColorCode = '0123456789ABCDEF';
+        //     let finalCode = '#';
+        //     for(let counter = 0; counter < 6; counter++){
+        //         finalCode = finalCode + makingColorCode[Math.floor(Math.random() * 16)];
+        //     }
+        //     return finalCode;
+        // }
+
+        // let el = document.querySelector('.box');
+        // el.onclick = function(){
+        //     let top = Math.random()*500;
+        //     let left = Math.random()*500;
+        //     el.style.backgroundColor = colorCode();
+        //     el.style.top = top+'px';
+        //     el.style.left = left+ 'px';
+        // }
+
+
+    </script>
+</body>
+</html>

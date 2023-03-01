@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollMagic Wiki Tutorial: Basic Tween</title>
+    <style>
+        html, body{
+            margin: 0;
+            height: 100%;
+        }
+        h1, p{
+            margin: 0;
+            padding: 0;
+        }
+        section{
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #000;
+        }
+        .full-screen{
+            /* makes panels the entire window height */
+            height: 100%;  
+        }
+        .blue{
+            background-color: #3883d8;
+            padding-bottom: 100px;
+        }
+        .red{
+            background-color: #cf3535;
+        }
+        .orange{
+            background-color: #ea6300;
+        }
+        .green{
+            /* background-color: #068016; */
+            background-color: transparent;
+        }
+        .green.container{
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .row{
+            position: relative;
+            overflow: hidden;
+            margin: 0 -2rem;
+            padding: 10rem 0;
+            display: flex;
+        }
+        .col{
+            padding: 1rem 2rem;
+            width: 50%;
+        }
+        .headline{
+            position: relative;
+        }
+        .bar{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #3bf1b5;
+        }
+        .image-wrap{
+            position: relative;
+        }
+        .image-wrap:after{
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            bottom: -10px;
+            left: -10px;
+            background-color: #3bf1b5;
+            z-index: -1;
+        }
+        .image{
+            position: relative;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            /* height: 500px; */
+        }
+        .scrollmagic-pin-spacer{
+            height: 100vh !important
+        }
+        .horizontal, .horizonTitle{
+            font-size: 32px;
+            padding: 50px 0 ;
+        }
+        #js-wrapper{
+            width: 100%;
+            height: 100%;
+        }
+        #js-wrapper, .wrapper{
+            width: 500%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+        }
+        .part{
+            height: 100%;
+            width: calc(100% / 5);
+            float: left;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .section__title{
+            width: 100%;
+            height: 100%;
+        }
+        #title1{
+            font-size: 50px;
+            background-color: #F64747;
+        }
+        #title2{
+            font-size: 50px;
+            background-color: #22A7F0;
+        }
+        #title3{
+            font-size: 50px;
+            background-color: #F9690e;
+        }
+        #title4{
+            font-size: 50px;
+            background-color: #9b59b6;
+        }
+        #title5{
+            font-size: 50px;
+            background-color: #03c9a9;
+        }
+        /* .parallax .parawrapper{
+            height: 2000px;
+        } */
+        .parallax .parawrapper #hero{
+            background-color: #f0f0f0;
+            height: 100%;
+            position: relative;
+        }
+        .parallax #hero .layer{
+            position: absolute;
+            box-shadow: 0 10px 30px #555;
+            -webkit-backdrop-filter: blur(10px);
+            width: 100px;
+            height: 100px;
+            z-index: 1030;
+        }
+        #layer1{
+            background-color: gray;
+            opacity: 0.8;
+            top: 110px;
+            left: 70px;
+        }
+        #layer2{
+            background-color: gray;
+            opacity: 0.6;
+            top: 160px;
+            left: 160px;
+        }
+        #layer3{
+            background-color: gray;
+            opacity: 0.7;
+            top: 50px;
+            left: 280px;
+        }
+        #layer4{
+            background-color: gray;
+            opacity: 0.6;
+            top: 90px;
+            left: 220px;
+        }
+    </style>
+</head>
+<body>
+    <main class="full-screen">
+        <section class="full-screen blue">
+            <div>
+                <h1>Basic Tweening</h1>
+                <a href="https://codepen.io/grayghostvisuals/pen/Baewwb">ScrollMagic Wiki Tutorial : Basic Tween</a>
+                <a href="https://codepen.io/kjbrum/details/MpgZKq">Content Reveal Effects (ScrollMagic)</a>
+            </div>
+        </section>
+        <section class="full-screen orange" id="scale-trigger">
+            <div id="scale-animation">
+                <!-- <p>This element will scale down using the scale value of the CSS transform property.</p> -->
+                <video id="video" autoplay playsinline muted="muted" preload="auto" loop="loop">
+                    <source src="./video/Lewis Capaldi - Someone You Loved _ 1 Minute Lyric Video.mp4"></source>
+                </video>
+            </div>
+        </section>
+        <section class="full-screen red" id="bg-trigger">
+            <div id="bg-animation">
+                <p>This element will have the background color change</p>
+            </div>
+        </section>
+        <section class="full-screen green" id="reveal-trigger">
+            <div class="container">
+                <div class="row row-reverse">
+                    <div class="col left">
+                        <div class="image-wrap">
+                            <div class="image" style="background-image: url(https://unsplash.it/500/300?image=1044)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col right">
+                        <h3 class="headline">
+                            <span>Subway Tile Photo Booth</span>
+                            <div class="bar"></div>
+                        </h3>
+                        <div class="content">
+                            <p>
+                            Roof party cray butcher, man braid paleo authentic YOLO retro crucifix godard portland tilde.  Cliche church-key lomo, prism fashion axe keffiyeh hammock copper mug retro vexillologist craft beer organic.  Lumbersexual meggings seitan man bun, retro cred.  Vinyl green juice neutra prism.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="horizontal">
+            <div class="horizonTitle">Scroll Down</div>
+            <div id="js-wrapper">
+                <div class="wrapper" id="js-slideContainer">
+                    <div class="part">
+                        <div class="section__title" id="title1">Section 1</div>
+                    </div>
+                    <div class="part">
+                        <div class="section__title" id="title2">Section 2</div>
+                    </div>
+                    <div class="part">
+                        <div class="section__title" id="title3">Section 3</div>
+                    </div>
+                    <div class="part">
+                        <div class="section__title" id="title4">Section 4</div>
+                    </div>
+                    <div class="part">
+                        <div class="section__title" id="title5">Section 5</div>
+                    </div>
+                </div>
+            </div>
+            <div class="horizonTitle">Scroll Up</div>
+        </section>
+        <section class="full-screen parallax">
+            <div class="parawrapper">
+                <div id="hero">
+                    <div class="layer" id="layer1"></div>
+                    <div class="layer" id="layer2"></div>
+                    <div class="layer" id="layer3"></div>
+                    <div class="layer" id="layer4"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/animation.gsap.min.js"></script>
+    <script>
+        
+        //init ScrollMagic Controller
+        var controller = new ScrollMagic.Controller();
+
+        //Scale Animation Setup
+        //.to('@target', @length, {@object})
+        var scale_tween = TweenMax.to('#scale-animation', 0.5, {
+            transform: 'scale(.5)',
+            ease: Linear.easeNone
+        });
+        //BG Animation Setup
+        //.to('@target', @length, {@object})
+        var bg_tween = TweenMax.to('#bg-trigger', 1, {
+            backgroundColor: '#FFA500',
+            ease: Linear.easeNone
+        });
+        //reveal Animation Setup
+        //.to('@target', @length, {@object})
+        // var reveal_tween = TweenMax.to('#reveal-trigger', 1, {
+        //     // backgroundColor: '#5af',
+        //     ease: Cubic.easeOut,
+        // });
+        // var reveal_tween = TweenMax.fromTo(['.image-wrap'], 0.5, {opacity: 0, height: 0}, {opaicty: 1, height: 500})
+
+        var tl = new TimelineMax();
+        tl.add(
+            TweenMax.fromTo('.bar', 1, {right: 0}, {right: 1000}), 
+        )
+        tl.add(
+            TweenMax.fromTo('.image-wrap', 1, {opacity: 0, height: 0,}, {opacity: 1, height: 520}),
+            TweenMax.fromTo('.image',1, {autoAlpha: 0, height: 0},{autoAlpha: 1, height: 500}),
+        )
+        
+        //horizontal
+        var horizontalSlide = new TimelineMax()
+        .to("#js-slideContainer", 1, {x: "-20%"})
+        .to("#js-slideContainer", 1, {x: "-40%"})
+        .to("#js-slideContainer", 1, {x: "-60%"})
+        .to("#js-slideContainer", 1, {x: "-80%"})
+        
+        //parallax
+        var hero = new TimelineMax()
+            .add([
+                TweenMax.to("#layer1", 1, {y: 1500, ease: Linear.easeNone}),
+                TweenMax.to("#layer2", 1, {y: 1000, ease: Linear.easeNone}),
+                TweenMax.to("#layer3", 1, {y: 800, ease: Linear.easeNone}),
+                TweenMax.to("#layer4", 1, {y: 90, ease: Linear.easeNone}),
+            ])
+
+
+        
+        //Scale Scene
+        var scale_scene = new ScrollMagic.Scene({
+            triggerElement: '#scale-trigger',
+            triggerHook: 0.5
+        })
+            .setTween(scale_tween);
+        
+        //Background Scene
+        var bg_scene = new ScrollMagic.Scene({
+            triggerElement: '#bg-trigger',
+        })
+            .setTween(bg_tween);
+        
+        //reveal scene
+        var reveal_scene = new ScrollMagic.Scene({
+            triggerElement: '#reveal-trigger',
+        })
+            .setTween(tl);
+        
+        //horizontal
+        var horizontal_scene = new ScrollMagic.Scene({
+            triggerElement: "#js-wrapper",
+            triggerHook: "onLeave",
+            duration: "400%",
+        })
+            .setPin("#js-wrapper")
+            .setTween(horizontalSlide)
+        
+        //parallax
+        var parallax_scene = new ScrollMagic.Scene({
+            triggerElement: '#hero',
+            duration: '150%',
+        })
+        .setTween(hero)
+
+        controller.addScene([
+            scale_scene,
+            bg_scene,
+            reveal_scene,
+            horizontal_scene,
+            parallax_scene
+        ])
+
+    </script>
+</body>
+</html>
