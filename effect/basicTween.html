@@ -34,6 +34,9 @@
         .orange{
             background-color: #ea6300;
         }
+        video{
+            max-width: 100%;
+        }
         .green{
             /* background-color: #068016; */
             background-color: transparent;
@@ -47,12 +50,14 @@
         .row{
             position: relative;
             overflow: hidden;
-            margin: 0 -2rem;
+            /* margin: 0 -2rem; */
+            margin: 0;
             padding: 10rem 0;
             display: flex;
         }
         .col{
-            padding: 1rem 2rem;
+            /* padding: 1rem 2rem; */
+            padding: 1rem 0rem;
             width: 50%;
         }
         .headline{
@@ -90,7 +95,9 @@
         }
         .horizontal, .horizonTitle{
             font-size: 32px;
-            padding: 50px 0 ;
+            padding: 50px 0;
+            max-width: 100%;
+            overflow-x: hidden;
         }
         #js-wrapper{
             width: 100%;
@@ -146,7 +153,7 @@
         .parallax #hero .layer{
             position: absolute;
             box-shadow: 0 10px 30px #555;
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
             width: 100px;
             height: 100px;
             z-index: 1030;
