@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>figma - Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        .btn-primary{
+            background-color: #2CA9AB !important;
+            border: 1px solid #2CA9AB !important;
+            border-radius: 0rem !important;
+        }
+        .mt-6{
+            margin-top: 64px;
+        }
+        .h-360{
+            height: 360px;
+        }
+        .h-180{
+            height: 180px;
+        }
+        .object-fit-cover{
+            object-fit: cover;
+        }
+        .card{
+            border-radius: 0;
+        }
+        .card-img-top{
+            border-radius: 0;
+        }
+        .header{
+            background: url(https://images.unsplash.com/photo-1504416285472-eccf03dd31eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80) center center/ cover no-repeat;
+            height: 560px;
+            position: relative;
+        }
+        .header::after{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #000;
+            opacity: 0.5
+        }
+        .pattern{
+            background: url(https://www.toptal.com/designers/subtlepatterns/uploads/beanstalk.png) center center / 20% repeat;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">好吃的日式餐廳</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dropdown
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled">Disabled</a>
+              </li>
+            </ul>
+            <button type="button" class="btn btn-primary">Primary</button>
+          </div>
+        </div>
+    </nav>
+
+    <header class="header">
+        <div class="container d-flex align-items-center h-100 position-relative" style="z-index: 1;">
+            <div>
+                <h1 class="text-white">日式料理<br>Nihonryōri</h1>
+                <button type="button" class="btn btn-primary">Primary</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="container mt-6">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-5">
+                <img class="h-360 w-100 object-fit-cover" src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="">
+            </div>
+            <div class="col-md-5">
+                <h2>絕不用手碰，保證清潔</h2>
+                <p>內文介紹！啼一池茜佰的一反論，的以。主俊到時買世麼轟鳳月到？怎故熬眩是每到化力入臺部工學很一。浪的平廂大嘶逸潛白再涼凰星中一個；整兩月養生網知懶國盆勻年勞梯認相濫珊平有且找則楚我釐新資有於我。的；於痞更有飼先</p>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center mt-4 flex-row-reverse">
+            <div class="col-md-5">
+                <img class="h-360 w-100 object-fit-cover" src="https://images.unsplash.com/photo-1607301405390-d831c242f59b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="">
+            </div>
+            <div class="col-md-5">
+                <h2>絕不用手碰，保證清潔</h2>
+                <p>內文介紹！啼一池茜佰的一反論，的以。主俊到時買世麼轟鳳月到？怎故熬眩是每到化力入臺部工學很一。浪的平廂大嘶逸潛白再涼凰星中一個；整兩月養生網知懶國盆勻年勞梯認相濫珊平有且找則楚我釐新資有於我。的；於痞更有飼先</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pattern py-4 mt-6">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-4">
+                    <img src="./img/undraw_eating_together_re_ux62 1.png" class="img-fluid" alt="">
+                </div>
+                <div class="col-md-4">
+                    <p>135到教戈妳開都，鵰屆傳行妥溜安能…時是前給仕又們取。了科小面偉常櫻的？…向霸酷買…凰該壘寫發加呵學忌災學蛇常直代、經日資區小還轉試覺，星盤科。鑑眠草別的和少俾魔？愁有要新長等能？涼我做教阻仕的樣一已嘩抨</p>
+                    <button type="button" class="btn btn-primary w-100">訂閱我吃到飽</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mt-6">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img src="https://images.unsplash.com/photo-1607301405418-780ee5e6dd10?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1583&q=80" class="card-img-top h-180" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary">訂閱</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img src="https://images.unsplash.com/photo-1583623025817-d180a2221d0a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80" class="card-img-top h-180" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary">訂閱</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img src="https://images.unsplash.com/photo-1617196034564-65baf56380ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1208&q=80" class="card-img-top h-180" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary">訂閱</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark mt-6 py-5">
+        <div class="container text-white">
+            <div class="h1">日式料理<br>Nihonryōri</div>
+            <div>好吃的日式餐廳</div>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</body>
+</html>
